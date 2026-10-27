@@ -1,127 +1,288 @@
 # TalentOps AI
+### Evidence-Based Recruitment Intelligence and Workflow Automation
 
-**Evidence-Based Recruitment Intelligence and Workflow Automation**
-*From resume ingestion to explainable candidate matching and recruitment workflow automation.*
+**TalentOps AI** is a recruitment intelligence platform that helps recruiters streamline resume screening, evaluate candidate-to-job alignment, and manage recruitment workflows through explainable AI-assisted analysis.
 
-A local-first MVP built for an AI-intern placement drive. It ingests PDF/DOCX resumes, builds structured candidate
-profiles, matches them to job descriptions **with the resume text that supports each result**, detects duplicate
-candidates, tracks a review pipeline, and can optionally emit minimal events to an n8n webhook.
+The platform combines resume parsing, semantic text matching, evidence-based requirement evaluation, candidate management, and workflow automation in one locally runnable application.
 
-> This is a student MVP using **synthetic data only**. It is not production-ready, has no enterprise integrations, and
-> no business impact has been measured. All outputs are decision *support*; a human recruiter reviews every candidate.
+Its core principle is simple: **make candidate evaluation more transparent by showing the evidence behind every match, while keeping hiring decisions in human hands.**
 
-## Business problem
-Recruiters screen large resume volumes in mixed formats, re-screen the same people, and struggle to explain why a
-candidate was shortlisted. TalentOps AI demonstrates a transparent alternative: show *which requirement* is supported
-by *which resume line*, say clearly when evidence is missing, and keep the human in charge.
+> **Project status:** Working MVP with local AI-based text matching, resume processing, candidate management, and an optional n8n workflow integration. Some integrations and deployment capabilities remain future work.
 
-## Features
-- PDF / DOCX upload with type, magic-byte and size validation; extracted-text preview; clear errors (empty, corrupt, scanned PDFs)
-- Rule-based structured profile (name, email, phone, skills, education, experience, projects, certifications) with warnings and *uncertain* flags
-- Requirement-by-requirement matching: **matched / partial / insufficient evidence**, supporting text, coverage, transparent score
-- Duplicate detection by normalized email (never silently overwrites; name/phone matches are warnings only)
-- Review statuses: Pending Review, Shortlisted, Further Review Required (no auto-reject exists)
-- Screening history, workflow event log, funnel metrics with explicit definitions
-- Optional n8n webhook (minimal payload; failures never lose the record)
-- Synthetic demo data loaded with one click
+## The Problem
+
+Recruitment teams often process resumes in different formats, compare candidates against changing job requirements, and manually track screening decisions across multiple tools.
+
+This creates several challenges:
+
+- Extracting useful information from unstructured resumes.
+- Identifying relevant skills when resumes and job descriptions use different wording.
+- Explaining why a candidate appears to meet a particular requirement.
+- Detecting duplicate candidate submissions.
+- Maintaining consistent screening records and candidate pipeline visibility.
+- Connecting screening activity to downstream recruitment workflows.
+
+TalentOps AI explores how lightweight AI and workflow automation can address these challenges without relying on paid AI APIs or sending candidate resumes to external AI services.
+
+## Key Features
+
+### 1. Resume Ingestion and Parsing
+- Upload PDF and DOCX resumes.
+- Validate file types and file sizes.
+- Extract resume text and preview the extracted content.
+- Identify candidate information, including contact details, skills, education, experience, projects, and certifications where detectable.
+- Display warnings when information is missing or extraction is uncertain.
+
+### 2. Explainable Candidate-to-Job Matching
+- Create job descriptions with required and preferred skills.
+- Compare resume content with individual job requirements.
+- Use local semantic embeddings to identify potentially relevant evidence beyond exact keyword matches.
+- Classify requirements as **Matched**, **Partial**, or **Insufficient Evidence**.
+- Display supporting resume text for individual matches.
+- Calculate a transparent requirement-coverage score.
+
+Semantic similarity is used as decision support, not as a prediction of hiring success. Missing evidence does not mean a candidate lacks a skill.
+
+### 3. Candidate Management and Duplicate Detection
+- Store candidate profiles and screening records in SQLite.
+- Normalize email addresses for duplicate detection.
+- Warn about possible duplicates without automatically merging records.
+- Preserve screening history.
+- Track candidate review status.
+
+### 4. Recruitment Pipeline Dashboard
+- View candidate records and screening activity.
+- Track candidates by review status.
+- Inspect screening history and workflow events.
+- Monitor candidate pipeline counts and other explicitly defined metrics.
+- Load synthetic demonstration data for testing the application.
+
+### 5. Workflow Automation
+- Optionally send screening events to an n8n webhook.
+- Route events according to screening status.
+- Record workflow delivery outcomes.
+- Handle webhook failures without losing the underlying screening record.
+- Send only the minimum information required for an event, rather than complete resumes or unnecessary personal details.
+
+The core application remains usable when n8n is not configured or available.
 
 ## Architecture
+
 ```mermaid
-flowchart LR
-  UI[React UI] -->|REST /api| API[FastAPI app]
-  API --> EX[Extraction: PyMuPDF / python-docx]
-  EX --> PA[Rule-based parser -> Pydantic profile]
-  PA --> DB[(SQLite)]
-  API --> MA[Matcher]
-  MA --> EM{{MiniLM CPU embeddings<br/>or TF-IDF fallback}}
-  MA --> DB
-  API -->|minimal payload, timeout-safe| N8N[(Optional n8n webhook)]
-  DB --> MET[Funnel metrics]
+flowchart TD
+    UI[React Frontend] -->|REST API| API[FastAPI Application]
+    API --> EXT[Resume Extraction]
+    EXT --> PARSE[Structured Profile Parser]
+    PARSE --> DB[(SQLite Database)]
+    API --> MATCH[Requirement Matching Engine]
+    MATCH --> MODEL[MiniLM Embeddings or TF-IDF Fallback]
+    MATCH --> DB
+    API --> DASH[Recruitment Dashboard and Metrics]
+    API --> EVENT[Workflow Event Service]
+    EVENT --> DB
+    EVENT -. Optional webhook .-> N8N[n8n Automation]
 ```
-Why a small API server at all? A browser UI cannot run PyMuPDF/SQLite, so the React UI talks to one local FastAPI
-process (no microservices). The built UI is committed in `frontend/dist`, so **Node.js is not needed to run the app**.
 
-## Tech stack
-Python 3.11, FastAPI, Pydantic, SQLite, PyMuPDF, python-docx, Sentence Transformers (`all-MiniLM-L6-v2`, CPU),
-scikit-learn, NumPy, React (Vite), pytest, requests. No paid API, no cloud LLM, no GPU, no Docker.
+The application uses a single local FastAPI server rather than a distributed microservice architecture. The React frontend communicates with the API, which handles resume processing, matching, persistence, and workflow events.
 
-## Installation (Windows 10, PowerShell)
-Prerequisites: [Python 3.11](https://www.python.org/downloads/windows/) (tick "Add python.exe to PATH"),
-[Git](https://git-scm.com/download/win), [VS Code](https://code.visualstudio.com/). Node.js is only needed to modify the UI.
+The built frontend is included in `frontend/dist`, so Node.js is not required merely to run the application.
+
+## Technology Stack
+
+| Component | Technology |
+|---|---|
+| Frontend | React, Vite |
+| Backend | Python, FastAPI |
+| Data validation | Pydantic |
+| Resume extraction | PyMuPDF, python-docx |
+| Semantic matching | Sentence Transformers, `all-MiniLM-L6-v2` |
+| Matching fallback | scikit-learn TF-IDF |
+| Numerical operations | NumPy |
+| Local persistence | SQLite |
+| Workflow automation | Optional n8n webhook |
+| Testing | pytest |
+| Version control | Git and GitHub |
+
+The AI model runs locally on the CPU. The application does not require a paid AI API, cloud LLM, GPU acceleration, Docker, or application deployment.
+
+## Getting Started
+
+### Prerequisites
+
+- Windows 10 or a compatible operating system.
+- Python 3.11 recommended.
+- Git.
+- VS Code, or another code editor.
+
+Node.js is only required if you want to modify and rebuild the frontend.
+
+### Installation
+
+Clone the repository:
+
 ```powershell
-git clone <your-repo-url> talentops-ai
+git clone <your-repository-url>
 cd talentops-ai
-python --version                      # expect 3.11.x
+```
+
+Create and activate a virtual environment:
+
+```powershell
 python -m venv .venv
-.\.venv\Scripts\Activate.ps1          # if blocked: Set-ExecutionPolicy -Scope CurrentUser RemoteSigned
+.\.venv\Scripts\Activate.ps1
+```
+
+Install dependencies:
+
+```powershell
 python -m pip install --upgrade pip
-pip install -r requirements.txt       # CPU PyTorch is the default on Windows PyPI
-python scripts\download_model.py      # one-time ~90 MB; optional - app falls back to TF-IDF without it
+pip install -r requirements.txt
+```
+
+Download the local embedding model:
+
+```powershell
+python scripts\download_model.py
+```
+
+This is a one-time download. If the model is unavailable, the application can fall back to TF-IDF matching, provided the fallback dependencies are installed.
+
+Start the application:
+
+```powershell
 uvicorn app.main:app --port 8000
 ```
-Open http://127.0.0.1:8000 and click **Load synthetic demo data**.
 
-## Usage
-1. Dashboard -> *Load synthetic demo data* (or **Upload resume** with files from `sample_data/resumes/`).
-2. **Jobs** -> create a job (required/preferred skills, optional minimum experience).
-3. **Candidates** -> open a candidate -> *Run screening* -> read the evidence -> set a review status.
-4. Re-upload `asha_verma_resubmission.pdf` after `asha_verma.pdf` to see duplicate detection.
+Open [http://127.0.0.1:8000](http://127.0.0.1:8000) in your browser.
 
-Developing the UI: `cd frontend; npm install; npm run dev` (port 5173, proxies to 8000); `npm run build` refreshes `dist`.
-Regenerate sample files: `python scripts\generate_samples.py`.
+Select **Load synthetic demo data** to explore the application without using real candidate information.
 
-## Matching methodology
-For each requirement the matcher looks for evidence in resume segments (lines/sentences):
-1. **Matched** - the skill term or a known alias appears as a whole word in a resume segment (e.g. `sklearn` = scikit-learn; `Java` does not match `JavaScript`).
-2. **Partial** - no keyword hit, but a segment is semantically similar (cosine similarity >= threshold: 0.45 for MiniLM, 0.20 for TF-IDF). Semantic-only evidence is capped at *partial* so a human confirms it.
-3. **Insufficient evidence** - nothing found. This does **not** mean the candidate lacks the skill.
+### Running Tests
 
-**Score** = 100 x (0.8 x required coverage + 0.2 x preferred coverage); matched = 1, partial = 0.5, insufficient = 0.
-If only one group exists it carries full weight. Minimum experience (self-declared in the resume) and whole-description
-similarity are displayed but excluded from the score.
+Run the automated test suite:
 
-Embeddings vs TF-IDF: MiniLM maps text to dense vectors, so "trained classifiers" can be near "machine learning" without sharing words.
-TF-IDF only weighs shared words, so it is more literal and misses paraphrases. The thresholds are **heuristic and uncalibrated**.
-Cosine similarity is a similarity measure, **not a probability of hiring success**, and the score is **not a validated predictor of job performance**.
-
-## Database design (SQLite)
-- `candidates` - profile JSON, resume text, `email_normalized` with a **partial UNIQUE index** (only when an email exists)
-- `jobs` - title, description, required/preferred skills, minimum experience
-- `screenings` - append-only history per candidate x job; `review_status` guarded by a CHECK constraint
-- `workflow_events` - audit log with n8n delivery status (`disabled` / `delivered` / `failed: ...`)
-
-## Workflow automation design
-On each screening and each human status change the app stores the event first, then POSTs
-`{candidate_id, job_id, status, timestamp}` to `N8N_WEBHOOK_URL` (if set) with a short timeout. No name, email, phone or resume text is sent.
-See [`docs/N8N_SETUP.md`](docs/N8N_SETUP.md). The workflow file is **generated, not yet verified in a live n8n** until you complete its checklist.
-
-## Testing
 ```powershell
 python -m pytest -q
 ```
-Tests use small synthetic fixtures, need no network or API keys, and use the TF-IDF backend. One test exercises the MiniLM
-backend and is **skipped automatically** if the model is not downloaded.
 
-## Limitations
-- No OCR: scanned/image-only PDFs are rejected with an explanatory error
-- Rule-based parsing is heuristic: unusual layouts, multi-column resumes and non-English resumes may parse poorly; name detection is always "uncertain"
-- Skill detection uses a small built-in lexicon plus the resume's skills section
-- Experience years are only read from explicit statements like "3 years of experience"; dates are not computed
-- Thresholds/weights are uncalibrated; no evaluation against labelled data has been done
-- Single-user local app: no authentication, no multi-tenant access control, SQLite only
-- Resume text is stored unencrypted in the local database
+The tests cover resume extraction, validation, candidate records, duplicate detection, matching logic, score calculations, and workflow handling. Model-specific test coverage depends on whether the embedding model is available.
 
-## Responsible AI safeguards
-- Human-in-the-loop: no automatic rejection or ranking cut-off; statuses are set by a person
-- Missing evidence is reported as "insufficient evidence", never as proof of absence
-- Scoring uses only requirement evidence - not name, contact details, photos or demographics (covered by a test)
-- Duplicates are never auto-merged and never overwritten; fuzzy matches are warnings
-- Minimal data leaves the app (webhook payload); no external AI service sees resumes
-- Synthetic sample data only; `.gitignore` blocks databases, `.env` and model weights
+## How Matching Works
 
-## Future improvements
-OCR for scanned PDFs, local-LLM parser behind the same `parse_resume` interface, calibrated thresholds with labelled data,
-bias/fairness audits, authentication and roles, data retention/deletion tools, ranking views with human override logs.
+TalentOps AI evaluates each requirement against segments of the candidate's resume.
+
+**Matched:** A relevant skill or recognized alias is found in the resume text.
+
+**Partial:** A text segment appears semantically relevant, but the evidence requires human confirmation.
+
+**Insufficient Evidence:** The system cannot identify sufficient supporting text for the requirement.
+
+The application calculates a coverage score using the following formula:
+
+\[
+\text{Score} = 100 \times (0.8R + 0.2P)
+\]
+
+Where:
+
+- \(R\) is the proportion of required-skill coverage.
+- \(P\) is the proportion of preferred-skill coverage.
+- Matched requirements contribute 1, partial matches contribute 0.5, and insufficient evidence contributes 0.
+
+If only one requirement group is present, that group receives full weight.
+
+The score weights and similarity thresholds are heuristic and have not been calibrated against labelled recruitment data. The score is not a probability of hiring success or a validated measure of future job performance.
+
+## Data Model
+
+The local SQLite database contains the main records needed to support the recruitment workflow:
+
+- **Candidates:** Structured profiles, normalized email addresses, and extracted resume text.
+- **Jobs:** Job titles, descriptions, required skills, preferred skills, and optional experience requirements.
+- **Screenings:** Candidate-to-job evaluations, review status, and screening history.
+- **Workflow events:** Event records and webhook delivery outcomes.
+
+Database constraints help prevent duplicate email records and invalid review statuses.
+
+## Workflow Automation
+
+When screening activity or a human review-status change generates an event, the application records the event locally and can optionally send a webhook request to n8n.
+
+The payload contains only the fields needed for workflow routing, such as candidate ID, job ID, screening status, and timestamp.
+
+The n8n workflow can be imported using the instructions in [`docs/N8N_SETUP.md`](docs/N8N_SETUP.md).
+
+**Integration status:** The workflow definition is provided as part of the project. Treat the n8n integration as unverified until it has been imported and tested in a running n8n instance.
+
+## Testing and Validation
+
+The project includes automated tests for:
+
+- PDF and DOCX extraction.
+- Empty, invalid, and oversized files.
+- Candidate profile validation.
+- Email normalization and duplicate detection.
+- Database persistence.
+- Requirement matching and missing-evidence handling.
+- Match-score calculations.
+- Workflow payload construction.
+- Webhook failures and timeouts.
+
+Tests use synthetic fixtures and do not require paid APIs or external AI services.
+
+## Responsible AI and Privacy
+
+TalentOps AI is designed to support recruiters, not replace their judgment.
+
+- **Human review:** The application does not automatically reject candidates.
+- **Evidence-based evaluation:** Matching results include supporting resume text where available.
+- **Transparent uncertainty:** Missing evidence is not treated as proof that a candidate lacks a skill.
+- **Requirement-focused matching:** Candidate names, contact details, photographs, and demographic attributes are not intended to influence match scores.
+- **Controlled duplicate handling:** Potential duplicates are flagged rather than automatically merged.
+- **Data minimization:** Optional webhook events exclude complete resumes and unnecessary personal information.
+- **Local processing:** Resume analysis does not require sending resume text to a paid or cloud AI API.
+
+The current MVP is intended for local experimentation with synthetic data, not for production use with real candidate records.
+
+## Current Limitations
+
+- Scanned image-only PDFs are not supported because OCR is not implemented.
+- Resume parsing relies on rules and heuristics, which may perform poorly on unusual layouts, multi-column resumes, or non-English documents.
+- Name extraction is uncertain and may require manual correction.
+- Experience is extracted from explicit statements rather than comprehensively calculated from employment dates.
+- Matching thresholds and score weights have not been calibrated against labelled data.
+- The application has not undergone a formal fairness or predictive-validity evaluation.
+- The current version is a single-user local application without authentication or multi-tenant access control.
+- Resume text is stored in the local database without encryption.
+- Live n8n integration must be verified separately.
+
+## Future Improvements
+
+Potential next steps include:
+
+- OCR for scanned resumes.
+- More robust resume section and experience extraction.
+- Configurable job-specific matching rules.
+- Evaluation against labelled resume-to-job examples.
+- Fairness testing and additional audit controls.
+- Authentication, role-based access, and data retention tools.
+- More recruitment-system integrations.
+- Expanded workflow automation and notification options.
+- Additional dashboard filters and recruiter reporting.
 
 ## Screenshots
-_Add after running the app:_ `docs/screenshots/dashboard.png`, `upload.png`, `evidence.png`.
+
+Add screenshots of the running application to `docs/screenshots/` as the interface is validated.
+
+Suggested screenshots:
+
+- `dashboard.png`
+- `resume-upload.png`
+- `candidate-match-evidence.png`
+- `candidate-pipeline.png`
+
+## Project Goals
+
+TalentOps AI explores how lightweight semantic AI, explainable matching, structured data management, and workflow automation can work together to make recruitment screening more transparent and easier to manage.
+
+The emphasis is on practical implementation, traceable evidence, responsible use of AI, and a modular architecture that can be extended as the project evolves.
