@@ -1,0 +1,321 @@
+{
+  "name": "TalentOps AI - Screening Event Router (optional)",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "talentops-screening",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "webhook",
+      "name": "Screening Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        0,
+        200
+      ],
+      "webhookId": "talentops-screening-demo"
+    },
+    {
+      "parameters": {
+        "language": "javaScript",
+        "jsCode": "const body = $input.first().json.body ?? {};\nconst allowed = ['Pending Review', 'Shortlisted', 'Further Review Required'];\nconst keys = ['candidate_id', 'job_id', 'status', 'timestamp'];\nconst extra = Object.keys(body).filter(k => !keys.includes(k));\nconst valid = Number.isInteger(body.candidate_id) && Number.isInteger(body.job_id)\n  && allowed.includes(body.status) && typeof body.timestamp === 'string'\n  && !isNaN(Date.parse(body.timestamp)) && extra.length === 0;\nreturn [{ json: valid\n  ? { valid: true, route: body.status, candidate_id: body.candidate_id, job_id: body.job_id, status: body.status, timestamp: body.timestamp }\n  : { valid: false, route: 'invalid', error: 'Invalid payload: expected exactly candidate_id (int), job_id (int), status (known review status), timestamp (ISO string)' } }];"
+      },
+      "id": "validate",
+      "name": "Validate Payload",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        220,
+        200
+      ]
+    },
+    {
+      "parameters": {
+        "dataType": "string",
+        "value1": "={{ $json.route }}",
+        "rules": {
+          "rules": [
+            {
+              "value2": "Shortlisted",
+              "output": 0
+            },
+            {
+              "value2": "Pending Review",
+              "output": 1
+            },
+            {
+              "value2": "Further Review Required",
+              "output": 2
+            },
+            {
+              "value2": "invalid",
+              "output": 3
+            }
+          ]
+        }
+      },
+      "id": "route",
+      "name": "Route by Status",
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 1,
+      "position": [
+        440,
+        200
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "a1",
+              "name": "notification_mode",
+              "value": "TEST_ONLY - nothing is sent",
+              "type": "string"
+            },
+            {
+              "id": "a2",
+              "name": "notification_text",
+              "value": "={{ '[TEST ONLY - not sent] Candidate #' + $json.candidate_id + ' / job #' + $json.job_id + ' was SHORTLISTED by a human reviewer at ' + $json.timestamp }}",
+              "type": "string"
+            },
+            {
+              "id": "a3",
+              "name": "event_label",
+              "value": "shortlisted",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "prepare-shortlisted-notice",
+      "name": "Prepare Shortlisted Notice",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        700,
+        40
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "a1",
+              "name": "notification_mode",
+              "value": "TEST_ONLY - nothing is sent",
+              "type": "string"
+            },
+            {
+              "id": "a2",
+              "name": "notification_text",
+              "value": "={{ '[TEST ONLY - not sent] Candidate #' + $json.candidate_id + ' / job #' + $json.job_id + ' is awaiting recruiter review at ' + $json.timestamp }}",
+              "type": "string"
+            },
+            {
+              "id": "a3",
+              "name": "event_label",
+              "value": "pending_review",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "prepare-pending-notice",
+      "name": "Prepare Pending Notice",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        700,
+        200
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "a1",
+              "name": "notification_mode",
+              "value": "TEST_ONLY - nothing is sent",
+              "type": "string"
+            },
+            {
+              "id": "a2",
+              "name": "notification_text",
+              "value": "={{ '[TEST ONLY - not sent] Candidate #' + $json.candidate_id + ' / job #' + $json.job_id + ' needs FURTHER REVIEW at ' + $json.timestamp }}",
+              "type": "string"
+            },
+            {
+              "id": "a3",
+              "name": "event_label",
+              "value": "further_review",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "prepare-further-review-notice",
+      "name": "Prepare Further Review Notice",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        700,
+        360
+      ]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ { \"received\": true, \"route\": $json.event_label } }}",
+        "options": {
+          "responseCode": 200
+        }
+      },
+      "id": "respond-ok",
+      "name": "Respond 200",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        960,
+        200
+      ]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ { \"received\": false, \"error\": $json.error } }}",
+        "options": {
+          "responseCode": 400
+        }
+      },
+      "id": "respond-bad",
+      "name": "Respond 400 Invalid",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        700,
+        540
+      ]
+    },
+    {
+      "parameters": {
+        "content": "OPTIONAL. Receives minimum-necessary screening events from TalentOps AI.\nNo emails/WhatsApp are sent: the 'Prepare ... Notice' nodes only build TEST text. Replace with a real notification node only after you have a lawful basis and consent process.",
+        "height": 120,
+        "width": 420
+      },
+      "id": "note",
+      "name": "Note",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        0,
+        20
+      ]
+    }
+  ],
+  "connections": {
+    "Screening Webhook": {
+      "main": [
+        [
+          {
+            "node": "Validate Payload",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Validate Payload": {
+      "main": [
+        [
+          {
+            "node": "Route by Status",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Route by Status": {
+      "main": [
+        [
+          {
+            "node": "Prepare Shortlisted Notice",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Prepare Pending Notice",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Prepare Further Review Notice",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Respond 400 Invalid",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare Shortlisted Notice": {
+      "main": [
+        [
+          {
+            "node": "Respond 200",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare Pending Notice": {
+      "main": [
+        [
+          {
+            "node": "Respond 200",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare Further Review Notice": {
+      "main": [
+        [
+          {
+            "node": "Respond 200",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "active": false,
+  "pinData": {},
+  "meta": {
+    "templateCredsSetupCompleted": true
+  }
+}

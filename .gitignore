@@ -1,0 +1,32 @@
+# Environments and secrets
+.venv/
+venv/
+.env
+*.pem
+
+# Databases (may contain personal data) - never commit
+data/*.db
+data/*.db-journal
+data/*.sqlite*
+*.db
+
+# Python
+__pycache__/
+*.pyc
+.pytest_cache/
+
+# Model weights / caches (downloaded locally, not committed)
+models/
+.cache/
+huggingface/
+
+# Node
+frontend/node_modules/
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.vscode/
+
+# Real resumes must never be committed; only files in sample_data/resumes (synthetic) are allowed
+uploads/
