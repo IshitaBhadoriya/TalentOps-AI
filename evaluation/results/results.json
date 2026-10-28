@@ -1,0 +1,186 @@
+{
+ "results": {
+  "keyword": {
+   "name": "Keyword/alias only (baseline) (no intent filter)",
+   "chosen_threshold_on_dev": 2.0,
+   "test": {
+    "strict": {
+     "precision": 0.8914728682170543,
+     "recall": 0.5958549222797928,
+     "f1": 0.7142857142857143,
+     "accuracy": 0.77,
+     "n": 400,
+     "tp": 115,
+     "fp": 14,
+     "fn": 78,
+     "tn": 193,
+     "flagged_rate_by_state": {
+      "explicit": 1.0,
+      "absent": 0.0,
+      "paraphrase": 0.0,
+      "distractor": 0.737
+     }
+    },
+    "lenient": {
+     "precision": 0.8914728682170543,
+     "recall": 0.5958549222797928,
+     "f1": 0.7142857142857143,
+     "accuracy": 0.77,
+     "n": 400,
+     "tp": 115,
+     "fp": 14,
+     "fn": 78,
+     "tn": 193,
+     "flagged_rate_by_state": {
+      "explicit": 1.0,
+      "absent": 0.0,
+      "paraphrase": 0.0,
+      "distractor": 0.737
+     }
+    },
+    "mean_spearman_score_vs_truth": 0.662,
+    "meets_all_required": {
+     "precision": 0.6666666666666666,
+     "recall": 0.13333333333333333,
+     "f1": 0.2222222222222222
+    }
+   }
+  },
+  "keyword+filter": {
+   "name": "Keyword/alias only (baseline) + intent filter",
+   "chosen_threshold_on_dev": 2.0,
+   "test": {
+    "strict": {
+     "precision": 1.0,
+     "recall": 0.5958549222797928,
+     "f1": 0.7467532467532468,
+     "accuracy": 0.805,
+     "n": 400,
+     "tp": 115,
+     "fp": 0,
+     "fn": 78,
+     "tn": 207,
+     "flagged_rate_by_state": {
+      "explicit": 1.0,
+      "absent": 0.0,
+      "paraphrase": 0.0,
+      "distractor": 0.0
+     }
+    },
+    "lenient": {
+     "precision": 1.0,
+     "recall": 0.5958549222797928,
+     "f1": 0.7467532467532468,
+     "accuracy": 0.805,
+     "n": 400,
+     "tp": 115,
+     "fp": 0,
+     "fn": 78,
+     "tn": 207,
+     "flagged_rate_by_state": {
+      "explicit": 1.0,
+      "absent": 0.0,
+      "paraphrase": 0.0,
+      "distractor": 0.0
+     }
+    },
+    "mean_spearman_score_vs_truth": 0.726,
+    "meets_all_required": {
+     "precision": 1.0,
+     "recall": 0.13333333333333333,
+     "f1": 0.23529411764705882
+    }
+   }
+  },
+  "tfidf+filter": {
+   "name": "TF-IDF (keyword-weighted fallback) + intent filter",
+   "chosen_threshold_on_dev": 0.15,
+   "test": {
+    "strict": {
+     "precision": 1.0,
+     "recall": 0.5958549222797928,
+     "f1": 0.7467532467532468,
+     "accuracy": 0.805,
+     "n": 400,
+     "tp": 115,
+     "fp": 0,
+     "fn": 78,
+     "tn": 207,
+     "flagged_rate_by_state": {
+      "explicit": 1.0,
+      "absent": 0.0,
+      "paraphrase": 0.0,
+      "distractor": 0.0
+     }
+    },
+    "lenient": {
+     "precision": 1.0,
+     "recall": 0.5958549222797928,
+     "f1": 0.7467532467532468,
+     "accuracy": 0.805,
+     "n": 400,
+     "tp": 115,
+     "fp": 0,
+     "fn": 78,
+     "tn": 207,
+     "flagged_rate_by_state": {
+      "explicit": 1.0,
+      "absent": 0.0,
+      "paraphrase": 0.0,
+      "distractor": 0.0
+     }
+    },
+    "mean_spearman_score_vs_truth": 0.726,
+    "meets_all_required": {
+     "precision": 1.0,
+     "recall": 0.13333333333333333,
+     "f1": 0.23529411764705882
+    }
+   }
+  }
+ },
+ "dev_sweeps": {
+  "keyword": {
+   "2.0": {
+    "lenient_f1": 0.6332046332046332,
+    "lenient_precision": 0.7522935779816514,
+    "lenient_recall": 0.5466666666666666
+   }
+  },
+  "keyword+filter": {
+   "2.0": {
+    "lenient_f1": 0.7068965517241379,
+    "lenient_precision": 1.0,
+    "lenient_recall": 0.5466666666666666
+   }
+  },
+  "tfidf+filter": {
+   "0.1": {
+    "lenient_f1": 0.7063829787234043,
+    "lenient_precision": 0.9764705882352941,
+    "lenient_recall": 0.5533333333333333
+   },
+   "0.15": {
+    "lenient_f1": 0.7068965517241379,
+    "lenient_precision": 1.0,
+    "lenient_recall": 0.5466666666666666
+   },
+   "0.2": {
+    "lenient_f1": 0.7068965517241379,
+    "lenient_precision": 1.0,
+    "lenient_recall": 0.5466666666666666
+   },
+   "0.3": {
+    "lenient_f1": 0.7068965517241379,
+    "lenient_precision": 1.0,
+    "lenient_recall": 0.5466666666666666
+   },
+   "0.4": {
+    "lenient_f1": 0.7068965517241379,
+    "lenient_precision": 1.0,
+    "lenient_recall": 0.5466666666666666
+   }
+  }
+ },
+ "note": "MiniLM backend NOT evaluated in this run (ModuleNotFoundError: model/library unavailable)."
+}

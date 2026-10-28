@@ -134,6 +134,35 @@ function Candidates({ openCandidate, refreshKey }) {
   </div>);
 }
 
+function Ranking({ openCandidate, refreshKey, onDone }) {
+  const [jobs, setJobs] = useState([]);
+  const [jobId, setJobId] = useState("");
+  const [data, setData] = useState(null);
+  const [msg, setMsg] = useState("");
+  const [busy, setBusy] = useState(false);
+  useEffect(() => { api("/jobs").then((j) => { setJobs(j); if (j[0] && !jobId) setJobId(String(j[0].id)); }); }, [refreshKey]);
+  const load = useCallback(() => (jobId ? api("/jobs/" + jobId + "/ranking").then(setData).catch((e) => setMsg(e.message)) : null), [jobId]);
+  useEffect(() => { load(); }, [load, refreshKey]);
+  async function screenAll() {
+    setBusy(true); setMsg("");
+    try { const o = await api("/jobs/" + jobId + "/screen-all", { method: "POST" }); setMsg("Screened " + o.newly_screened + " new candidate(s)."); await load(); onDone(); }
+    catch (e) { setMsg(e.message); } finally { setBusy(false); }
+  }
+  return (<div className="card"><h2>Candidate ranking by job</h2>
+    {jobs.length === 0 ? <p className="muted">Create a job first.</p> : <>
+      <div className="row"><select style={{ width: 320, margin: 0 }} value={jobId} onChange={(e) => setJobId(e.target.value)}>{jobs.map((j) => <option key={j.id} value={j.id}>#{j.id} {j.title}</option>)}</select>
+        <button className="primary" disabled={busy || !jobId} onClick={screenAll}>{busy ? "Screening..." : "Screen all unscreened candidates"}</button>
+        {jobId && <a href={"/api/jobs/" + jobId + "/ranking.csv"}><button className="ghost">Download CSV</button></a>}</div>
+      {msg && <Msg>{msg}</Msg>}
+      {data && <><Msg kind="warn">{data.note}</Msg>
+        {data.items.length === 0 ? <p className="muted">No screenings for this job yet.</p> :
+          <table><thead><tr><th>Rank</th><th>Candidate</th><th>Coverage score</th><th>Matched / partial / insufficient</th><th>Required skills without evidence</th><th>Review status</th></tr></thead>
+            <tbody>{data.items.map((i) => <tr className="click" key={i.screening_id} onClick={() => openCandidate(i.candidate_id)}>
+              <td>{fmt(i.rank)}</td><td>{i.name || "#" + i.candidate_id} {i.is_synthetic && <span className="badge">synthetic</span>}</td><td>{fmt(i.score)}</td>
+              <td>{i.counts.matched} / {i.counts.partial} / {i.counts.insufficient}</td><td>{i.missing_required.join(", ") || "-"}</td><td><span className="badge">{i.review_status}</span></td></tr>)}</tbody></table>}</>}</>}
+  </div>);
+}
+
 function ScreeningView({ s, reload }) {
   const r = s.result;
   const [msg, setMsg] = useState("");
@@ -151,7 +180,8 @@ function ScreeningView({ s, reload }) {
       {r.requirements.map((q) => <tr key={q.requirement + q.type}>
         <td>{q.requirement}<div className="muted">{q.type}</div></td>
         <td><span className={"badge " + q.status}>{q.status === "insufficient" ? "insufficient evidence" : q.status}</span><div className="muted">{q.match_type !== "none" && q.match_type + " / sim " + q.similarity}</div></td>
-        <td>{q.evidence.length ? q.evidence.map((e, i) => <div className="evidence" key={i}>{e}</div>) : <span className="muted">No supporting text found (this does not prove the candidate lacks the skill).</span>}</td></tr>)}
+        <td>{q.evidence.length ? q.evidence.map((e, i) => <div className="evidence" key={i}>{e}</div>) : <span className="muted">No supporting text found (this does not prove the candidate lacks the skill).</span>}
+          {(q.excluded_evidence || []).map((e, i) => <div className="evidence" style={{ opacity: 0.7, borderColor: "#e67700" }} key={"x" + i}>Excluded (mentioned only as a goal, plan or negation - please verify): {e}</div>)}</td></tr>)}
     </tbody></table>
     <p className="muted">Experience: {r.experience_check.status} - {r.experience_check.note} {r.description_similarity !== null && " | Whole-description similarity (context only): " + r.description_similarity}</p>
     <Msg kind="warn">{r.disclaimer}</Msg>
@@ -197,7 +227,7 @@ export default function App() {
   const bump = () => setKey((k) => k + 1);
   const openCandidate = (id) => { setCid(id); setTab("detail"); };
   async function demo() { await api("/demo/load", { method: "POST" }); bump(); }
-  const tabs = [["dashboard", "Dashboard"], ["upload", "Upload resume"], ["jobs", "Jobs"], ["candidates", "Candidates"]];
+  const tabs = [["dashboard", "Dashboard"], ["upload", "Upload resume"], ["jobs", "Jobs"], ["candidates", "Candidates"], ["ranking", "Ranking"]];
   return (<>
     <header><div><h1>TalentOps AI</h1><small>Evidence-based recruitment intelligence - human review required</small></div>
       <nav>{tabs.map(([k, l]) => <button key={k} className={tab === k ? "active" : ""} onClick={() => setTab(k)}>{l}</button>)}</nav></header>
@@ -206,6 +236,7 @@ export default function App() {
       {tab === "upload" && <Upload onDone={bump} openCandidate={openCandidate} />}
       {tab === "jobs" && <Jobs onDone={bump} />}
       {tab === "candidates" && <Candidates openCandidate={openCandidate} refreshKey={key} />}
+      {tab === "ranking" && <Ranking openCandidate={openCandidate} refreshKey={key} onDone={bump} />}
       {tab === "detail" && cid && <><button className="ghost" onClick={() => setTab("candidates")}>Back to list</button><CandidateDetail id={cid} onChange={bump} /></>}
     </main></>);
 }

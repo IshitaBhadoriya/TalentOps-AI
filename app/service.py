@@ -145,3 +145,52 @@ def get_candidate(candidate_id: int) -> dict:
 def list_jobs() -> list[dict]:
     with db.session() as conn:
         return [db.job_row_to_dict(r) for r in conn.execute("SELECT * FROM jobs ORDER BY id DESC")]
+
+
+def screen_all(job_id: int) -> dict:
+    """Screen every candidate that has no screening for this job yet. Existing history is untouched."""
+    with db.session() as conn:
+        if not conn.execute("SELECT 1 FROM jobs WHERE id=?", (job_id,)).fetchone():
+            raise NotFound("Job not found.")
+        ids = [r["id"] for r in conn.execute(
+            "SELECT id FROM candidates WHERE id NOT IN (SELECT candidate_id FROM screenings WHERE job_id=?) ORDER BY id",
+            (job_id,))]
+    for cid in ids:
+        run_screening(cid, job_id)
+    return {"job_id": job_id, "newly_screened": len(ids)}
+
+
+def ranking(job_id: int) -> dict:
+    """Latest screening per candidate for one job, ordered by coverage score (highest first).
+
+    The order is a REVIEW-PRIORITY aid. Ties share a rank. It is not a hiring decision and no candidate is rejected.
+    """
+    with db.session() as conn:
+        job = conn.execute("SELECT * FROM jobs WHERE id=?", (job_id,)).fetchone()
+        if not job:
+            raise NotFound("Job not found.")
+        rows = conn.execute(
+            "SELECT s.id AS screening_id, s.candidate_id, s.score, s.meets_all_required, s.review_status, "
+            "s.result_json, c.name, c.is_synthetic FROM screenings s "
+            "JOIN (SELECT candidate_id, MAX(id) mid FROM screenings WHERE job_id=? GROUP BY candidate_id) m ON s.id=m.mid "
+            "JOIN candidates c ON c.id = s.candidate_id "
+            "ORDER BY (s.score IS NULL), s.score DESC, s.candidate_id", (job_id,)).fetchall()
+    items = []
+    for r in rows:
+        res = json.loads(r["result_json"])
+        items.append({
+            "screening_id": r["screening_id"], "candidate_id": r["candidate_id"], "name": r["name"],
+            "is_synthetic": bool(r["is_synthetic"]), "score": r["score"], "counts": res["counts"],
+            "meets_all_required": bool(r["meets_all_required"]), "review_status": r["review_status"],
+            "missing_required": [q["requirement"] for q in res["requirements"]
+                                 if q["type"] == "required" and q["status"] == "insufficient"],
+        })
+    scores = [i["score"] for i in items]
+    for i in items:  # competition ranking: ties share the same rank
+        i["rank"] = 1 + sum(1 for sc in scores if sc is not None and i["score"] is not None and sc > i["score"]) \
+            if i["score"] is not None else None
+    return {
+        "job": db.job_row_to_dict(job), "items": items,
+        "note": "Order is a review-priority aid based on requirement coverage evidence. It is not a hiring decision; "
+                "equal scores share a rank and insufficient evidence does not mean a skill is absent.",
+    }

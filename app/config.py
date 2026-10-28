@@ -41,6 +41,11 @@ class Settings:
         return float(os.environ.get("N8N_TIMEOUT_SECONDS", "3"))
 
     @property
+    def inbound_token(self) -> str:
+        # Shared secret for /api/inbound/resume (used by n8n). Empty = endpoint disabled.
+        return os.environ.get("TALENTOPS_INBOUND_TOKEN", "").strip()
+
+    @property
     def embedding_backend(self) -> str:
         # auto | embedding | tfidf
         return os.environ.get("TALENTOPS_EMBEDDING_BACKEND", "auto").lower()

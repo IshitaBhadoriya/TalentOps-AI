@@ -34,6 +34,22 @@ DISCLAIMER = (
 )
 
 
+# Lines that mention a skill only as a goal, a plan, or something not used are NOT evidence of the skill.
+# Hand-written heuristic (not a trained model): it will miss unusual phrasing and may occasionally exclude a
+# genuine line, which is why excluded lines are always shown to the recruiter instead of being silently dropped.
+NON_EVIDENCE_PATTERNS = [re.compile(p, re.IGNORECASE) for p in [
+    r"\b(?:plan(?:s|ning)?|hop(?:e|es|ing)|want(?:s|ed)?|would like|wish(?:es)?|aim(?:s|ing)?|intend(?:s|ing)?)\s+to\b",
+    r"\b(?:interested in|curious about|heard (?:of|about)|know of)\b",
+    r"\b(?:not yet|never|haven'?t|have not|has not|yet to|not used|not familiar|unfamiliar|currently learning)\b",
+    r"\bno\s+(?:practical |prior |real |hands-on )?(?:experience|exposure|projects)\b",
+    r"\b(?:only|just)\s+(?:watched|read about|heard)\b",
+]]
+
+
+def is_non_evidence(segment: str) -> bool:
+    return any(p.search(segment) for p in NON_EVIDENCE_PATTERNS)
+
+
 def segment_resume(text: str, max_len: int = 300) -> list[str]:
     """Split resume text into evidence-sized segments (lines / sentences), skipping headings."""
     segments: list[str] = []
@@ -129,8 +145,9 @@ def get_embedder(force_reload: bool = False):
     return _cached
 
 
-def _status_for(term: str, requirement_sims: np.ndarray, segments: list[str], threshold: float):
-    kw_idx = [i for i, seg in enumerate(segments) if term_in_text(term, seg)]
+def _status_for(term: str, requirement_sims: np.ndarray, segments: list[str], threshold: float,
+                excluded: frozenset = frozenset()):
+    kw_idx = [i for i, seg in enumerate(segments) if i not in excluded and term_in_text(term, seg)]
     order = np.argsort(-requirement_sims) if len(segments) else []
     if kw_idx:
         best = sorted(kw_idx, key=lambda i: -requirement_sims[i])[:2]
@@ -142,22 +159,29 @@ def _status_for(term: str, requirement_sims: np.ndarray, segments: list[str], th
     return "insufficient", "none", [], top1
 
 
-def match_candidate(resume_text: str, declared_years: Optional[float], job: dict, embedder=None) -> dict:
+def match_candidate(resume_text: str, declared_years: Optional[float], job: dict, embedder=None,
+                    filter_non_evidence: bool = True) -> dict:
     embedder = embedder or get_embedder()
     segments = segment_resume(resume_text)
+    excluded = frozenset(i for i, seg in enumerate(segments) if filter_non_evidence and is_non_evidence(seg))
     required, preferred = job.get("required_skills", []), job.get("preferred_skills", [])
     reqs = [(r, "required") for r in required] + [(p, "preferred") for p in preferred]
 
     queries = [embedder.query_template.format(req=r) for r, _ in reqs]
     sims = embedder.similarity(queries, segments)
+    if excluded and len(segments):
+        sims = sims.copy()
+        sims[:, list(excluded)] = 0.0  # goal/plan/negated lines can never be semantic evidence either
 
     results = []
     for i, (term, rtype) in enumerate(reqs):
         status, mtype, idxs, best = _status_for(term, sims[i] if len(segments) else np.array([]), segments,
-                                                embedder.partial_threshold)
+                                                embedder.partial_threshold, excluded)
+        skipped = [segments[j] for j in sorted(excluded) if term_in_text(term, segments[j])]
         results.append({
             "requirement": term, "type": rtype, "status": status, "match_type": mtype,
             "similarity": round(best, 3), "evidence": [segments[j] for j in idxs],
+            "excluded_evidence": skipped,  # mentions found only as a goal/plan/negation - shown for human review
         })
 
     def coverage(kind: str) -> Optional[float]:

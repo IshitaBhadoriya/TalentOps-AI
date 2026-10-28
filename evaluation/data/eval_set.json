@@ -1,0 +1,816 @@
+{
+ "seed": 7,
+ "jobs": [
+  {
+   "title": "Data Analyst Intern",
+   "required_skills": [
+    "SQL",
+    "Excel",
+    "Data Analysis"
+   ],
+   "preferred_skills": [
+    "Power BI",
+    "Python"
+   ]
+  },
+  {
+   "title": "Backend Developer Intern",
+   "required_skills": [
+    "Python",
+    "REST APIs",
+    "SQL",
+    "Git"
+   ],
+   "preferred_skills": [
+    "Docker",
+    "Testing"
+   ]
+  },
+  {
+   "title": "ML / AI Intern",
+   "required_skills": [
+    "Python",
+    "Machine Learning",
+    "NLP"
+   ],
+   "preferred_skills": [
+    "Docker",
+    "Git"
+   ]
+  },
+  {
+   "title": "Java Developer Trainee",
+   "required_skills": [
+    "Java",
+    "SQL",
+    "Git"
+   ],
+   "preferred_skills": [
+    "Testing"
+   ]
+  }
+ ],
+ "resumes": [
+  {
+   "id": 0,
+   "archetype": "ml",
+   "text": "Kabir Nair\nkabir.nair0@example.com\n\nSummary\nCurrently learning Docker; I have not used it in any project.\nKnow of Excel but have never used it for real work.\n\nSkills\nPython, SQL, Machine Learning, Data Analysis\n\nEducation\nB.Tech Computer Science, Example Institute (CGPA 8.2)\n\nExperience\nDeveloped data processing scripts in Python for weekly reporting\nApplied ML techniques including random forests to a classification project\n\nProjects\nWrote SQL queries with joins and aggregations for a sales dashboard\nUsed data analytics to summarise survey results for a club\nFine-tuned a transformer model to classify the sentiment of product reviews\nCaptain of the department cricket team",
+   "states": {
+    "Python": "explicit",
+    "SQL": "explicit",
+    "Machine Learning": "explicit",
+    "NLP": "paraphrase",
+    "REST APIs": "absent",
+    "Docker": "distractor",
+    "Git": "absent",
+    "Data Analysis": "explicit",
+    "Excel": "distractor",
+    "Testing": "absent",
+    "Java": "absent",
+    "Power BI": "absent"
+   }
+  },
+  {
+   "id": 1,
+   "archetype": "ml",
+   "text": "Ishaan Das\nishaan.das1@example.com\n\nSummary\nCurrently learning Docker; I have not used it in any project.\nNot yet familiar with Java; planning to study it.\n\nSkills\nMachine Learning, Data Analysis\n\nEducation\nB.Tech Computer Science, Example Institute (CGPA 8.8)\n\nExperience\nWrote Jupyter notebooks with NumPy and pandas to clean survey data\nDesigned a normalised SQL schema for an inventory project\nMaintained feature branches and resolved merge conflicts with teammates\n\nProjects\nTrained a machine learning model with scikit-learn to predict customer churn\nFine-tuned a transformer model to classify the sentiment of product reviews\nUsed data analytics to summarise survey results for a club\nVolunteered at an inter-college hackathon",
+   "states": {
+    "Python": "paraphrase",
+    "SQL": "explicit",
+    "Machine Learning": "explicit",
+    "NLP": "paraphrase",
+    "REST APIs": "absent",
+    "Docker": "distractor",
+    "Git": "paraphrase",
+    "Data Analysis": "explicit",
+    "Excel": "absent",
+    "Testing": "absent",
+    "Java": "distractor",
+    "Power BI": "absent"
+   }
+  },
+  {
+   "id": 2,
+   "archetype": "data",
+   "text": "Nisha Gill\nnisha.gill2@example.com\n\nSkills\nPython, Data Analysis\n\nEducation\nB.Tech Computer Science, Example Institute (CGPA 7.8)\n\nExperience\nPerformed data analysis on sales records to find seasonal trends\nManaged branches and resolved merge conflicts in Git\n\nProjects\nUsed Excel formulas and macros to automate attendance sheets\nDeveloped data processing scripts in Python for weekly reporting\nDesigned tables, primary keys and foreign keys for a library management system\nCaptain of the department cricket team",
+   "states": {
+    "Python": "explicit",
+    "SQL": "paraphrase",
+    "Machine Learning": "absent",
+    "NLP": "absent",
+    "REST APIs": "absent",
+    "Docker": "absent",
+    "Git": "explicit",
+    "Data Analysis": "explicit",
+    "Excel": "explicit",
+    "Testing": "absent",
+    "Java": "absent",
+    "Power BI": "absent"
+   }
+  },
+  {
+   "id": 3,
+   "archetype": "data",
+   "text": "Nisha Nair\nnisha.nair3@example.com\n\nSummary\nCurious about NLP but have not worked on any text projects.\n\nSkills\nPython, Data Analysis\n\nEducation\nB.Tech Computer Science, Example Institute (CGPA 9.0)\n\nExperience\nUsed data analytics to summarise survey results for a club\nWrote joins and group-by aggregations over relational tables in a database course project\n\nProjects\nTrained a machine learning model with scikit-learn to predict customer churn\nDeveloped data processing scripts in Python for weekly reporting\nUsed Excel formulas and macros to automate attendance sheets\nMember of the college robotics club",
+   "states": {
+    "Python": "explicit",
+    "SQL": "paraphrase",
+    "Machine Learning": "explicit",
+    "NLP": "distractor",
+    "REST APIs": "absent",
+    "Docker": "absent",
+    "Git": "absent",
+    "Data Analysis": "explicit",
+    "Excel": "explicit",
+    "Testing": "absent",
+    "Java": "absent",
+    "Power BI": "absent"
+   }
+  },
+  {
+   "id": 4,
+   "archetype": "ml",
+   "text": "Rahul Gill\nrahul.gill4@example.com\n\nSkills\nPython, Git\n\nEducation\nB.Tech Computer Science, Example Institute (CGPA 8.0)\n\nExperience\nManaged branches and resolved merge conflicts in Git\nDeveloped data processing scripts in Python for weekly reporting\n\nProjects\nSummarised survey responses with statistics and presented insights to the club\nTrained a random forest classifier and tuned hyperparameters with cross-validation\nVolunteered at an inter-college hackathon",
+   "states": {
+    "Python": "explicit",
+    "SQL": "absent",
+    "Machine Learning": "paraphrase",
+    "NLP": "absent",
+    "REST APIs": "absent",
+    "Docker": "absent",
+    "Git": "explicit",
+    "Data Analysis": "paraphrase",
+    "Excel": "absent",
+    "Testing": "absent",
+    "Java": "absent",
+    "Power BI": "absent"
+   }
+  },
+  {
+   "id": 5,
+   "archetype": "data",
+   "text": "Yash Khan\nyash.khan5@example.com\n\nSummary\nHoping to explore machine learning in the future; not yet practised.\nHaven't used Git yet; planning to set it up.\n\nSkills\nSQL, Excel\n\nEducation\nB.Tech Computer Science, Example Institute (CGPA 7.1)\n\nExperience\nPerformed data analysis on sales records to find seasonal trends\nUsed Excel formulas and macros to automate attendance sheets\n\nProjects\nWrote SQL queries with joins and aggregations for a sales dashboard\nBuilt interactive dashboards with slicers and calculated measures for sales performance\nOrganised a campus event for 200 students",
+   "states": {
+    "Python": "absent",
+    "SQL": "explicit",
+    "Machine Learning": "distractor",
+    "NLP": "absent",
+    "REST APIs": "absent",
+    "Docker": "absent",
+    "Git": "distractor",
+    "Data Analysis": "explicit",
+    "Excel": "explicit",
+    "Testing": "distractor",
+    "Java": "absent",
+    "Power BI": "paraphrase"
+   }
+  },
+  {
+   "id": 6,
+   "archetype": "ml",
+   "text": "Rahul Das\nrahul.das6@example.com\n\nSummary\nPlan to start Testing practices later; none so far.\n\nEducation\nB.Tech Computer Science, Example Institute (CGPA 7.5)\n\nExperience\nDesigned tables, primary keys and foreign keys for a library management system\n\nProjects\nBuilt a command-line tool using Python and the standard library\nBuilt a regression model to forecast demand and evaluated it with RMSE\nVolunteered at an inter-college hackathon",
+   "states": {
+    "Python": "explicit",
+    "SQL": "paraphrase",
+    "Machine Learning": "paraphrase",
+    "NLP": "absent",
+    "REST APIs": "absent",
+    "Docker": "absent",
+    "Git": "absent",
+    "Data Analysis": "absent",
+    "Excel": "absent",
+    "Testing": "distractor",
+    "Java": "absent",
+    "Power BI": "absent"
+   }
+  },
+  {
+   "id": 7,
+   "archetype": "data",
+   "text": "Diya Bose\ndiya.bose7@example.com\n\nSkills\nPython, Data Analysis\n\nEducation\nB.Tech Computer Science, Example Institute (CGPA 7.4)\n\nExperience\nAutomated attendance tracking with spreadsheet formulas and macros\nWrote automated checks that verify functions before each release\n\nProjects\nDeveloped data processing scripts in Python for weekly reporting\nPerformed data analysis on sales records to find seasonal trends\nWrote SQL queries with joins and aggregations for a sales dashboard\nMember of the college robotics club",
+   "states": {
+    "Python": "explicit",
+    "SQL": "explicit",
+    "Machine Learning": "absent",
+    "NLP": "absent",
+    "REST APIs": "absent",
+    "Docker": "absent",
+    "Git": "absent",
+    "Data Analysis": "explicit",
+    "Excel": "paraphrase",
+    "Testing": "paraphrase",
+    "Java": "absent",
+    "Power BI": "absent"
+   }
+  },
+  {
+   "id": 8,
+   "archetype": "java",
+   "text": "Nisha Iyer\nnisha.iyer8@example.com\n\nSummary\nCurious about NLP but have not worked on any text projects.\nWould like to get into data analysis; no projects yet.\n\nSkills\nSQL, Docker, Java\n\nEducation\nB.Tech Computer Science, Example Institute (CGPA 7.2)\n\nExperience\nDesigned a normalised SQL schema for an inventory project\nWrote Dockerfiles and used Docker Compose for local development\n\nProjects\nCollaborated through pull requests and code reviews on a shared repository\nBuilt a Java Swing desktop application for a college project\nMember of the college robotics club",
+   "states": {
+    "Python": "absent",
+    "SQL": "explicit",
+    "Machine Learning": "absent",
+    "NLP": "distractor",
+    "REST APIs": "absent",
+    "Docker": "explicit",
+    "Git": "paraphrase",
+    "Data Analysis": "distractor",
+    "Excel": "distractor",
+    "Testing": "absent",
+    "Java": "explicit",
+    "Power BI": "absent"
+   }
+  },
+  {
+   "id": 9,
+   "archetype": "backend",
+   "text": "Vihaan Khan\nvihaan.khan9@example.com\n\nSkills\nTesting, Power BI\n\nEducation\nB.Tech Computer Science, Example Institute (CGPA 8.3)\n\nExperience\nWrote unit testing suites with pytest for a backend service\nCreated Power BI dashboards for sales performance\nBuilt a text classification system using bag-of-words and word embeddings\n\nProjects\nDeveloped data processing scripts in Python for weekly reporting\nContainerised a web application with Docker for deployment\nWrote joins and group-by aggregations over relational tables in a database course project\nCaptain of the department cricket team",
+   "states": {
+    "Python": "explicit",
+    "SQL": "paraphrase",
+    "Machine Learning": "absent",
+    "NLP": "paraphrase",
+    "REST APIs": "absent",
+    "Docker": "explicit",
+    "Git": "absent",
+    "Data Analysis": "absent",
+    "Excel": "absent",
+    "Testing": "explicit",
+    "Java": "absent",
+    "Power BI": "explicit"
+   }
+  },
+  {
+   "id": 10,
+   "archetype": "novice",
+   "text": "Ishaan Das\nishaan.das10@example.com\n\nSummary\nCurious about NLP but have not worked on any text projects.\nWant to learn REST APIs; my projects so far have no backend.\n\nSkills\nExcel\n\nEducation\nB.Tech Computer Science, Example Institute (CGPA 8.9)\n\nExperience\nUsed Excel formulas and macros to automate attendance sheets\n\nProjects\nManaged branches and resolved merge conflicts in Git\nVolunteered at an inter-college hackathon",
+   "states": {
+    "Python": "absent",
+    "SQL": "absent",
+    "Machine Learning": "absent",
+    "NLP": "distractor",
+    "REST APIs": "distractor",
+    "Docker": "absent",
+    "Git": "explicit",
+    "Data Analysis": "absent",
+    "Excel": "explicit",
+    "Testing": "distractor",
+    "Java": "absent",
+    "Power BI": "absent"
+   }
+  },
+  {
+   "id": 11,
+   "archetype": "backend",
+   "text": "Tara Iyer\ntara.iyer11@example.com\n\nSkills\nPython, SQL\n\nEducation\nB.Tech Computer Science, Example Institute (CGPA 8.7)\n\nExperience\nContainerised a web application with Docker for deployment\nBuilt a command-line tool using Python and the standard library\n\nProjects\nDesigned HTTP endpoints that return JSON for a mobile application\nWrote SQL queries with joins and aggregations for a sales dashboard\nMaintained feature branches and resolved merge conflicts with teammates\nOrganised a campus event for 200 students",
+   "states": {
+    "Python": "explicit",
+    "SQL": "explicit",
+    "Machine Learning": "absent",
+    "NLP": "absent",
+    "REST APIs": "paraphrase",
+    "Docker": "explicit",
+    "Git": "paraphrase",
+    "Data Analysis": "absent",
+    "Excel": "absent",
+    "Testing": "absent",
+    "Java": "absent",
+    "Power BI": "absent"
+   }
+  },
+  {
+   "id": 12,
+   "archetype": "data",
+   "text": "Aarav Rao\naarav.rao12@example.com\n\nSummary\nWant to learn REST APIs; my projects so far have no backend.\n\nSkills\nPython, Git, Data Analysis\n\nEducation\nB.Tech Computer Science, Example Institute (CGPA 8.0)\n\nExperience\nFine-tuned a transformer model to classify the sentiment of product reviews\nUsed Git and GitHub for version control with pull requests\nWrote automated checks that verify functions before each release\n\nProjects\nDeveloped data processing scripts in Python for weekly reporting\nWrote SQL queries with joins and aggregations for a sales dashboard\nPublished business intelligence reports with filters for managers\nUsed data analytics to summarise survey results for a club\nMember of the college robotics club",
+   "states": {
+    "Python": "explicit",
+    "SQL": "explicit",
+    "Machine Learning": "absent",
+    "NLP": "paraphrase",
+    "REST APIs": "distractor",
+    "Docker": "absent",
+    "Git": "explicit",
+    "Data Analysis": "explicit",
+    "Excel": "absent",
+    "Testing": "paraphrase",
+    "Java": "absent",
+    "Power BI": "paraphrase"
+   }
+  },
+  {
+   "id": 13,
+   "archetype": "backend",
+   "text": "Yash Shah\nyash.shah13@example.com\n\nSummary\nHoping to explore machine learning in the future; not yet practised.\n\nSkills\nPython\n\nEducation\nB.Tech Computer Science, Example Institute (CGPA 7.8)\n\nExperience\nBuilt a command-line tool using Python and the standard library\nManaged branches and resolved merge conflicts in Git\nPublished a Power BI report with slicers and DAX measures\n\nProjects\nWrote joins and group-by aggregations over relational tables in a database course project\nBuilt and documented RESTful API endpoints returning JSON\nPackaged services into containers for consistent deployment across machines\nMember of the college robotics club",
+   "states": {
+    "Python": "explicit",
+    "SQL": "paraphrase",
+    "Machine Learning": "distractor",
+    "NLP": "absent",
+    "REST APIs": "explicit",
+    "Docker": "paraphrase",
+    "Git": "explicit",
+    "Data Analysis": "absent",
+    "Excel": "absent",
+    "Testing": "absent",
+    "Java": "absent",
+    "Power BI": "explicit"
+   }
+  },
+  {
+   "id": 14,
+   "archetype": "ml",
+   "text": "Aarav Gill\naarav.gill14@example.com\n\nSkills\nNLP\n\nEducation\nB.Tech Computer Science, Example Institute (CGPA 7.9)\n\nExperience\nWrote Dockerfiles and used Docker Compose for local development\nBuilt a regression model to forecast demand and evaluated it with RMSE\n\nProjects\nBuilt an NLP pipeline for tokenising and classifying support tickets\nMaintained feature branches and resolved merge conflicts with teammates\nWrote Jupyter notebooks with NumPy and pandas to clean survey data\nOrganised a campus event for 200 students",
+   "states": {
+    "Python": "paraphrase",
+    "SQL": "absent",
+    "Machine Learning": "paraphrase",
+    "NLP": "explicit",
+    "REST APIs": "absent",
+    "Docker": "explicit",
+    "Git": "paraphrase",
+    "Data Analysis": "absent",
+    "Excel": "absent",
+    "Testing": "absent",
+    "Java": "absent",
+    "Power BI": "absent"
+   }
+  },
+  {
+   "id": 15,
+   "archetype": "ml",
+   "text": "Nisha Rao\nnisha.rao15@example.com\n\nSkills\nNLP, Docker, Git\n\nEducation\nB.Tech Computer Science, Example Institute (CGPA 7.7)\n\nExperience\nWrote Jupyter notebooks with NumPy and pandas to clean survey data\nApplied natural language processing to extract entities from news articles\nPublished business intelligence reports with filters for managers\n\nProjects\nBuilt a regression model to forecast demand and evaluated it with RMSE\nManaged branches and resolved merge conflicts in Git\nWrote Dockerfiles and used Docker Compose for local development\nMember of the college robotics club",
+   "states": {
+    "Python": "paraphrase",
+    "SQL": "absent",
+    "Machine Learning": "paraphrase",
+    "NLP": "explicit",
+    "REST APIs": "absent",
+    "Docker": "explicit",
+    "Git": "explicit",
+    "Data Analysis": "absent",
+    "Excel": "absent",
+    "Testing": "absent",
+    "Java": "absent",
+    "Power BI": "paraphrase"
+   }
+  },
+  {
+   "id": 16,
+   "archetype": "java",
+   "text": "Ishaan Menon\nishaan.menon16@example.com\n\nSummary\nWould like to get into data analysis; no projects yet.\n\nEducation\nB.Tech Computer Science, Example Institute (CGPA 8.9)\n\nExperience\nManaged branches and resolved merge conflicts in Git\n\nProjects\nWrote joins and group-by aggregations over relational tables in a database course project\nImplemented inheritance and interfaces in a JVM-based library management project\nCaptain of the department cricket team",
+   "states": {
+    "Python": "absent",
+    "SQL": "paraphrase",
+    "Machine Learning": "absent",
+    "NLP": "absent",
+    "REST APIs": "absent",
+    "Docker": "absent",
+    "Git": "explicit",
+    "Data Analysis": "distractor",
+    "Excel": "absent",
+    "Testing": "absent",
+    "Java": "paraphrase",
+    "Power BI": "absent"
+   }
+  },
+  {
+   "id": 17,
+   "archetype": "data",
+   "text": "Rahul Rao\nrahul.rao17@example.com\n\nSkills\nSQL, Git, Excel\n\nEducation\nB.Tech Computer Science, Example Institute (CGPA 8.9)\n\nExperience\nExplored datasets, cleaned missing values and visualised trends with charts\nDesigned a normalised SQL schema for an inventory project\n\nProjects\nBuilt Excel dashboards with pivot tables for monthly reports\nManaged branches and resolved merge conflicts in Git\nDeveloped data processing scripts in Python for weekly reporting\nOrganised a campus event for 200 students",
+   "states": {
+    "Python": "explicit",
+    "SQL": "explicit",
+    "Machine Learning": "absent",
+    "NLP": "absent",
+    "REST APIs": "absent",
+    "Docker": "absent",
+    "Git": "explicit",
+    "Data Analysis": "paraphrase",
+    "Excel": "explicit",
+    "Testing": "absent",
+    "Java": "absent",
+    "Power BI": "absent"
+   }
+  },
+  {
+   "id": 18,
+   "archetype": "java",
+   "text": "Aarav Gill\naarav.gill18@example.com\n\nSkills\nJava\n\nEducation\nB.Tech Computer Science, Example Institute (CGPA 8.5)\n\nExperience\nDesigned a normalised SQL schema for an inventory project\nMaintained feature branches and resolved merge conflicts with teammates\n\nProjects\nAdded assertions and fixtures to catch regressions in a class project\nDeveloped a library management system in Java using OOP\nMember of the college robotics club",
+   "states": {
+    "Python": "absent",
+    "SQL": "explicit",
+    "Machine Learning": "absent",
+    "NLP": "absent",
+    "REST APIs": "absent",
+    "Docker": "absent",
+    "Git": "paraphrase",
+    "Data Analysis": "absent",
+    "Excel": "absent",
+    "Testing": "paraphrase",
+    "Java": "explicit",
+    "Power BI": "absent"
+   }
+  },
+  {
+   "id": 19,
+   "archetype": "backend",
+   "text": "Tara Das\ntara.das19@example.com\n\nSummary\nCurious about NLP but have not worked on any text projects.\nHeard about Power BI but have not used it.\n\nSkills\nExcel, Testing\n\nEducation\nB.Tech Computer Science, Example Institute (CGPA 8.5)\n\nExperience\nBuilt and documented RESTful API endpoints returning JSON\nUsed Excel formulas and macros to automate attendance sheets\nDesigned tables, primary keys and foreign keys for a library management system\n\nProjects\nMaintained feature branches and resolved merge conflicts with teammates\nAdded pytest tests and measured coverage on a class project\nPackaged services into containers for consistent deployment across machines\nAuthored automation scripts with virtual environments and pip packages\nVolunteered at an inter-college hackathon",
+   "states": {
+    "Python": "paraphrase",
+    "SQL": "paraphrase",
+    "Machine Learning": "absent",
+    "NLP": "distractor",
+    "REST APIs": "explicit",
+    "Docker": "paraphrase",
+    "Git": "paraphrase",
+    "Data Analysis": "absent",
+    "Excel": "explicit",
+    "Testing": "explicit",
+    "Java": "absent",
+    "Power BI": "distractor"
+   }
+  },
+  {
+   "id": 20,
+   "archetype": "ml",
+   "text": "Ishaan Gill\nishaan.gill20@example.com\n\nSummary\nPlan to start Testing practices later; none so far.\n\nEducation\nB.Tech Computer Science, Example Institute (CGPA 8.7)\n\nExperience\nMaintained feature branches and resolved merge conflicts with teammates\n\nProjects\nPackaged services into containers for consistent deployment across machines\nDesigned tables, primary keys and foreign keys for a library management system\nCaptain of the department cricket team",
+   "states": {
+    "Python": "absent",
+    "SQL": "paraphrase",
+    "Machine Learning": "absent",
+    "NLP": "absent",
+    "REST APIs": "absent",
+    "Docker": "paraphrase",
+    "Git": "paraphrase",
+    "Data Analysis": "absent",
+    "Excel": "absent",
+    "Testing": "distractor",
+    "Java": "absent",
+    "Power BI": "absent"
+   }
+  },
+  {
+   "id": 21,
+   "archetype": "ml",
+   "text": "Sana Khan\nsana.khan21@example.com\n\nSkills\nPython, SQL, Machine Learning\n\nEducation\nB.Tech Computer Science, Example Institute (CGPA 7.5)\n\nExperience\nApplied natural language processing to extract entities from news articles\nSummarised survey responses with statistics and presented insights to the club\nDeveloped data processing scripts in Python for weekly reporting\n\nProjects\nTrained a machine learning model with scikit-learn to predict customer churn\nDesigned a normalised SQL schema for an inventory project\nContainerised a web application with Docker for deployment\nOrganised a campus event for 200 students",
+   "states": {
+    "Python": "explicit",
+    "SQL": "explicit",
+    "Machine Learning": "explicit",
+    "NLP": "explicit",
+    "REST APIs": "absent",
+    "Docker": "explicit",
+    "Git": "absent",
+    "Data Analysis": "paraphrase",
+    "Excel": "absent",
+    "Testing": "absent",
+    "Java": "absent",
+    "Power BI": "absent"
+   }
+  },
+  {
+   "id": 22,
+   "archetype": "novice",
+   "text": "Rahul Das\nrahul.das22@example.com\n\nSummary\nPlanning to learn Python next semester; no practical experience yet.\nInterested in SQL but have only watched a short intro video.\n\nSkills\nREST APIs, Git\n\nEducation\nB.Tech Computer Science, Example Institute (CGPA 8.2)\n\nExperience\nUsed Git and GitHub for version control with pull requests\n\nProjects\nTrained a random forest classifier and tuned hyperparameters with cross-validation\nDeveloped REST APIs with Flask for a student portal\nOrganised a campus event for 200 students",
+   "states": {
+    "Python": "distractor",
+    "SQL": "distractor",
+    "Machine Learning": "paraphrase",
+    "NLP": "absent",
+    "REST APIs": "explicit",
+    "Docker": "absent",
+    "Git": "explicit",
+    "Data Analysis": "absent",
+    "Excel": "distractor",
+    "Testing": "absent",
+    "Java": "absent",
+    "Power BI": "absent"
+   }
+  },
+  {
+   "id": 23,
+   "archetype": "data",
+   "text": "Tara Nair\ntara.nair23@example.com\n\nSkills\nPython, SQL, Data Analysis, Power BI\n\nEducation\nB.Tech Computer Science, Example Institute (CGPA 7.1)\n\nExperience\nCreated pivot tables and lookup formulas in spreadsheets for monthly reports\nCreated Power BI dashboards for sales performance\nBuilt a command-line tool using Python and the standard library\n\nProjects\nDesigned a normalised SQL schema for an inventory project\nUsed data analytics to summarise survey results for a club\nTrained a machine learning model with scikit-learn to predict customer churn\nOrganised a campus event for 200 students",
+   "states": {
+    "Python": "explicit",
+    "SQL": "explicit",
+    "Machine Learning": "explicit",
+    "NLP": "absent",
+    "REST APIs": "absent",
+    "Docker": "absent",
+    "Git": "absent",
+    "Data Analysis": "explicit",
+    "Excel": "paraphrase",
+    "Testing": "absent",
+    "Java": "absent",
+    "Power BI": "explicit"
+   }
+  },
+  {
+   "id": 24,
+   "archetype": "java",
+   "text": "Diya Menon\ndiya.menon24@example.com\n\nSummary\nHoping to explore machine learning in the future; not yet practised.\n\nSkills\nSQL\n\nEducation\nB.Tech Computer Science, Example Institute (CGPA 7.4)\n\nExperience\nImplemented inheritance and interfaces in a JVM-based library management project\n\nProjects\nMaintained feature branches and resolved merge conflicts with teammates\nDesigned a normalised SQL schema for an inventory project\nOrganised a campus event for 200 students",
+   "states": {
+    "Python": "absent",
+    "SQL": "explicit",
+    "Machine Learning": "distractor",
+    "NLP": "absent",
+    "REST APIs": "absent",
+    "Docker": "absent",
+    "Git": "paraphrase",
+    "Data Analysis": "absent",
+    "Excel": "absent",
+    "Testing": "absent",
+    "Java": "paraphrase",
+    "Power BI": "absent"
+   }
+  },
+  {
+   "id": 25,
+   "archetype": "data",
+   "text": "Vihaan Bose\nvihaan.bose25@example.com\n\nSkills\nPython, Excel\n\nEducation\nB.Tech Computer Science, Example Institute (CGPA 7.1)\n\nExperience\nUsed data analytics to summarise survey results for a club\nDeveloped data processing scripts in Python for weekly reporting\n\nProjects\nWrote joins and group-by aggregations over relational tables in a database course project\nBuilt Excel dashboards with pivot tables for monthly reports\nVolunteered at an inter-college hackathon",
+   "states": {
+    "Python": "explicit",
+    "SQL": "paraphrase",
+    "Machine Learning": "absent",
+    "NLP": "absent",
+    "REST APIs": "absent",
+    "Docker": "absent",
+    "Git": "absent",
+    "Data Analysis": "explicit",
+    "Excel": "explicit",
+    "Testing": "absent",
+    "Java": "absent",
+    "Power BI": "absent"
+   }
+  },
+  {
+   "id": 26,
+   "archetype": "java",
+   "text": "Tara Khan\ntara.khan26@example.com\n\nSummary\nCurious about NLP but have not worked on any text projects.\n\nSkills\nSQL\n\nEducation\nB.Tech Computer Science, Example Institute (CGPA 7.6)\n\nExperience\nImplemented inheritance and interfaces in a JVM-based library management project\n\nProjects\nWrote SQL queries with joins and aggregations for a sales dashboard\nWrote automated checks that verify functions before each release\nVolunteered at an inter-college hackathon",
+   "states": {
+    "Python": "absent",
+    "SQL": "explicit",
+    "Machine Learning": "absent",
+    "NLP": "distractor",
+    "REST APIs": "absent",
+    "Docker": "absent",
+    "Git": "absent",
+    "Data Analysis": "absent",
+    "Excel": "absent",
+    "Testing": "paraphrase",
+    "Java": "paraphrase",
+    "Power BI": "absent"
+   }
+  },
+  {
+   "id": 27,
+   "archetype": "java",
+   "text": "Kabir Patel\nkabir.patel27@example.com\n\nSkills\nSQL\n\nEducation\nB.Tech Computer Science, Example Institute (CGPA 8.2)\n\nExperience\nTrained a machine learning model with scikit-learn to predict customer churn\nCreated backend routes with GET and POST handlers and status codes\n\nProjects\nBuilt a Java Swing desktop application for a college project\nAdded assertions and fixtures to catch regressions in a class project\nWrote SQL queries with joins and aggregations for a sales dashboard\nMember of the college robotics club",
+   "states": {
+    "Python": "absent",
+    "SQL": "explicit",
+    "Machine Learning": "explicit",
+    "NLP": "absent",
+    "REST APIs": "paraphrase",
+    "Docker": "absent",
+    "Git": "absent",
+    "Data Analysis": "absent",
+    "Excel": "absent",
+    "Testing": "paraphrase",
+    "Java": "explicit",
+    "Power BI": "absent"
+   }
+  },
+  {
+   "id": 28,
+   "archetype": "ml",
+   "text": "Rahul Patel\nrahul.patel28@example.com\n\nSummary\nWant to learn REST APIs; my projects so far have no backend.\nKnow of Excel but have never used it for real work.\n\nSkills\nMachine Learning, NLP, Docker, Git\n\nEducation\nB.Tech Computer Science, Example Institute (CGPA 8.3)\n\nExperience\nApplied ML techniques including random forests to a classification project\nManaged branches and resolved merge conflicts in Git\nAuthored automation scripts with virtual environments and pip packages\n\nProjects\nSummarised survey responses with statistics and presented insights to the club\nContainerised a web application with Docker for deployment\nApplied natural language processing to extract entities from news articles\nVolunteered at an inter-college hackathon",
+   "states": {
+    "Python": "paraphrase",
+    "SQL": "absent",
+    "Machine Learning": "explicit",
+    "NLP": "explicit",
+    "REST APIs": "distractor",
+    "Docker": "explicit",
+    "Git": "explicit",
+    "Data Analysis": "paraphrase",
+    "Excel": "distractor",
+    "Testing": "absent",
+    "Java": "distractor",
+    "Power BI": "absent"
+   }
+  },
+  {
+   "id": 29,
+   "archetype": "novice",
+   "text": "Yash Menon\nyash.menon29@example.com\n\nSummary\nHoping to explore machine learning in the future; not yet practised.\nWant to learn REST APIs; my projects so far have no backend.\n\nEducation\nB.Tech Computer Science, Example Institute (CGPA 8.8)\n\nProjects\nClass project report on a campus survey\nCaptain of the department cricket team",
+   "states": {
+    "Python": "absent",
+    "SQL": "absent",
+    "Machine Learning": "distractor",
+    "NLP": "absent",
+    "REST APIs": "distractor",
+    "Docker": "distractor",
+    "Git": "absent",
+    "Data Analysis": "absent",
+    "Excel": "absent",
+    "Testing": "absent",
+    "Java": "absent",
+    "Power BI": "distractor"
+   }
+  },
+  {
+   "id": 30,
+   "archetype": "novice",
+   "text": "Aarav Nair\naarav.nair30@example.com\n\nEducation\nB.Tech Computer Science, Example Institute (CGPA 7.4)\n\nExperience\nBuilt and documented RESTful API endpoints returning JSON\n\nProjects\nDeveloped a library management system in Java using OOP\nCaptain of the department cricket team",
+   "states": {
+    "Python": "absent",
+    "SQL": "absent",
+    "Machine Learning": "absent",
+    "NLP": "absent",
+    "REST APIs": "explicit",
+    "Docker": "absent",
+    "Git": "absent",
+    "Data Analysis": "absent",
+    "Excel": "absent",
+    "Testing": "absent",
+    "Java": "explicit",
+    "Power BI": "absent"
+   }
+  },
+  {
+   "id": 31,
+   "archetype": "ml",
+   "text": "Sana Das\nsana.das31@example.com\n\nSummary\nWant to learn REST APIs; my projects so far have no backend.\n\nSkills\nMachine Learning, NLP, Git\n\nEducation\nB.Tech Computer Science, Example Institute (CGPA 7.4)\n\nExperience\nTrained a machine learning model with scikit-learn to predict customer churn\nBuilt an NLP pipeline for tokenising and classifying support tickets\nUsed Git and GitHub for version control with pull requests\n\nProjects\nExplored datasets, cleaned missing values and visualised trends with charts\nPackaged services into containers for consistent deployment across machines\nAuthored automation scripts with virtual environments and pip packages\nMember of the college robotics club",
+   "states": {
+    "Python": "paraphrase",
+    "SQL": "absent",
+    "Machine Learning": "explicit",
+    "NLP": "explicit",
+    "REST APIs": "distractor",
+    "Docker": "paraphrase",
+    "Git": "explicit",
+    "Data Analysis": "paraphrase",
+    "Excel": "absent",
+    "Testing": "absent",
+    "Java": "absent",
+    "Power BI": "absent"
+   }
+  },
+  {
+   "id": 32,
+   "archetype": "data",
+   "text": "Yash Khan\nyash.khan32@example.com\n\nSkills\nExcel\n\nEducation\nB.Tech Computer Science, Example Institute (CGPA 7.6)\n\nExperience\nBuilt container images and ran multi-service stacks for local development\nBuilt interactive dashboards with slicers and calculated measures for sales performance\n\nProjects\nPerformed data analysis on sales records to find seasonal trends\nWrote SQL queries with joins and aggregations for a sales dashboard\nBuilt Excel dashboards with pivot tables for monthly reports\nMember of the college robotics club",
+   "states": {
+    "Python": "absent",
+    "SQL": "explicit",
+    "Machine Learning": "absent",
+    "NLP": "absent",
+    "REST APIs": "absent",
+    "Docker": "paraphrase",
+    "Git": "absent",
+    "Data Analysis": "explicit",
+    "Excel": "explicit",
+    "Testing": "absent",
+    "Java": "absent",
+    "Power BI": "paraphrase"
+   }
+  },
+  {
+   "id": 33,
+   "archetype": "data",
+   "text": "Tara Shah\ntara.shah33@example.com\n\nEducation\nB.Tech Computer Science, Example Institute (CGPA 8.9)\n\nExperience\nUsed Excel formulas and macros to automate attendance sheets\nWrote Jupyter notebooks with NumPy and pandas to clean survey data\n\nProjects\nPublished a Power BI report with slicers and DAX measures\nExplored datasets, cleaned missing values and visualised trends with charts\nOrganised a campus event for 200 students",
+   "states": {
+    "Python": "paraphrase",
+    "SQL": "absent",
+    "Machine Learning": "absent",
+    "NLP": "absent",
+    "REST APIs": "absent",
+    "Docker": "absent",
+    "Git": "absent",
+    "Data Analysis": "paraphrase",
+    "Excel": "explicit",
+    "Testing": "absent",
+    "Java": "absent",
+    "Power BI": "explicit"
+   }
+  },
+  {
+   "id": 34,
+   "archetype": "novice",
+   "text": "Sana Menon\nsana.menon34@example.com\n\nEducation\nB.Tech Computer Science, Example Institute (CGPA 7.3)\n\nProjects\nClass project report on a campus survey\nVolunteered at an inter-college hackathon",
+   "states": {
+    "Python": "absent",
+    "SQL": "absent",
+    "Machine Learning": "absent",
+    "NLP": "absent",
+    "REST APIs": "absent",
+    "Docker": "absent",
+    "Git": "absent",
+    "Data Analysis": "absent",
+    "Excel": "absent",
+    "Testing": "absent",
+    "Java": "absent",
+    "Power BI": "absent"
+   }
+  },
+  {
+   "id": 35,
+   "archetype": "backend",
+   "text": "Ishaan Khan\nishaan.khan35@example.com\n\nSkills\nREST APIs, Git\n\nEducation\nB.Tech Computer Science, Example Institute (CGPA 8.3)\n\nExperience\nBuilt container images and ran multi-service stacks for local development\nWrote Jupyter notebooks with NumPy and pandas to clean survey data\n\nProjects\nBuilt and documented RESTful API endpoints returning JSON\nDesigned tables, primary keys and foreign keys for a library management system\nManaged branches and resolved merge conflicts in Git\nCaptain of the department cricket team",
+   "states": {
+    "Python": "paraphrase",
+    "SQL": "paraphrase",
+    "Machine Learning": "absent",
+    "NLP": "absent",
+    "REST APIs": "explicit",
+    "Docker": "paraphrase",
+    "Git": "explicit",
+    "Data Analysis": "absent",
+    "Excel": "absent",
+    "Testing": "absent",
+    "Java": "absent",
+    "Power BI": "absent"
+   }
+  },
+  {
+   "id": 36,
+   "archetype": "java",
+   "text": "Tara Patel\ntara.patel36@example.com\n\nSummary\nPlanning to learn Python next semester; no practical experience yet.\nKnow of Excel but have never used it for real work.\n\nEducation\nB.Tech Computer Science, Example Institute (CGPA 8.4)\n\nExperience\nBuilt a desktop GUI application compiled to bytecode for the JVM\n\nProjects\nWrote joins and group-by aggregations over relational tables in a database course project\nMember of the college robotics club",
+   "states": {
+    "Python": "distractor",
+    "SQL": "paraphrase",
+    "Machine Learning": "absent",
+    "NLP": "absent",
+    "REST APIs": "absent",
+    "Docker": "absent",
+    "Git": "absent",
+    "Data Analysis": "absent",
+    "Excel": "distractor",
+    "Testing": "absent",
+    "Java": "paraphrase",
+    "Power BI": "absent"
+   }
+  },
+  {
+   "id": 37,
+   "archetype": "ml",
+   "text": "Rahul Gill\nrahul.gill37@example.com\n\nSkills\nNLP\n\nEducation\nB.Tech Computer Science, Example Institute (CGPA 8.3)\n\nExperience\nApplied natural language processing to extract entities from news articles\nBuilt and documented RESTful API endpoints returning JSON\n\nProjects\nWrote Jupyter notebooks with NumPy and pandas to clean survey data\nBuilt a regression model to forecast demand and evaluated it with RMSE\nManaged branches and resolved merge conflicts in Git\nCaptain of the department cricket team",
+   "states": {
+    "Python": "paraphrase",
+    "SQL": "absent",
+    "Machine Learning": "paraphrase",
+    "NLP": "explicit",
+    "REST APIs": "explicit",
+    "Docker": "absent",
+    "Git": "explicit",
+    "Data Analysis": "absent",
+    "Excel": "absent",
+    "Testing": "absent",
+    "Java": "absent",
+    "Power BI": "absent"
+   }
+  },
+  {
+   "id": 38,
+   "archetype": "java",
+   "text": "Ishaan Bose\nishaan.bose38@example.com\n\nSkills\nREST APIs\n\nEducation\nB.Tech Computer Science, Example Institute (CGPA 8.7)\n\nExperience\nBuilt and documented RESTful API endpoints returning JSON\nAdded assertions and fixtures to catch regressions in a class project\nCreated Power BI dashboards for sales performance\n\nProjects\nWrote joins and group-by aggregations over relational tables in a database course project\nBuilt a Java Swing desktop application for a college project\nCollaborated through pull requests and code reviews on a shared repository\nOrganised a campus event for 200 students",
+   "states": {
+    "Python": "absent",
+    "SQL": "paraphrase",
+    "Machine Learning": "absent",
+    "NLP": "absent",
+    "REST APIs": "explicit",
+    "Docker": "absent",
+    "Git": "paraphrase",
+    "Data Analysis": "absent",
+    "Excel": "absent",
+    "Testing": "paraphrase",
+    "Java": "explicit",
+    "Power BI": "explicit"
+   }
+  },
+  {
+   "id": 39,
+   "archetype": "java",
+   "text": "Tara Iyer\ntara.iyer39@example.com\n\nSkills\nJava\n\nEducation\nB.Tech Computer Science, Example Institute (CGPA 8.7)\n\nExperience\nWrote joins and group-by aggregations over relational tables in a database course project\nDesigned HTTP endpoints that return JSON for a mobile application\n\nProjects\nWrote unit testing suites with pytest for a backend service\nDeveloped a library management system in Java using OOP\nVolunteered at an inter-college hackathon",
+   "states": {
+    "Python": "absent",
+    "SQL": "paraphrase",
+    "Machine Learning": "absent",
+    "NLP": "absent",
+    "REST APIs": "paraphrase",
+    "Docker": "absent",
+    "Git": "absent",
+    "Data Analysis": "absent",
+    "Excel": "absent",
+    "Testing": "explicit",
+    "Java": "explicit",
+    "Power BI": "absent"
+   }
+  }
+ ],
+ "labels": "has_skill = explicit or paraphrase; no skill = absent or distractor"
+}

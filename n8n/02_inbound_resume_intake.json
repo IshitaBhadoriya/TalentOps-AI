@@ -1,0 +1,356 @@
+{
+  "name": "TalentOps AI - 2 Inbound resume intake",
+  "nodes": [
+    {
+      "parameters": {
+        "triggerOn": "folder",
+        "path": "C:\\talentops-inbox",
+        "events": [
+          "add"
+        ],
+        "options": {
+          "awaitWriteFinish": true,
+          "usePolling": true
+        }
+      },
+      "id": "i-trigger",
+      "name": "Watch Resume Inbox Folder",
+      "type": "n8n-nodes-base.localFileTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        260
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "read",
+        "fileSelector": "={{ $json.path }}",
+        "options": {
+          "dataPropertyName": "data"
+        }
+      },
+      "id": "i-read",
+      "name": "Read Resume File",
+      "type": "n8n-nodes-base.readWriteFile",
+      "typeVersion": 1,
+      "position": [
+        240,
+        260
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://127.0.0.1:8000/api/inbound/resume",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "X-API-Key",
+              "value": "REPLACE_WITH_TALENTOPS_INBOUND_TOKEN"
+            }
+          ]
+        },
+        "sendBody": true,
+        "contentType": "multipart-form-data",
+        "bodyParameters": {
+          "parameters": [
+            {
+              "parameterType": "formBinaryData",
+              "name": "file",
+              "inputDataFieldName": "data"
+            },
+            {
+              "name": "job_id",
+              "value": "1"
+            }
+          ]
+        },
+        "options": {
+          "timeout": 60000
+        }
+      },
+      "id": "i-http",
+      "name": "Send To TalentOps API",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        480,
+        260
+      ],
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "dataType": "string",
+        "value1": "={{ $json.error ? 'error' : ($json.duplicate ? 'duplicate' : 'ok') }}",
+        "rules": {
+          "rules": [
+            {
+              "value2": "ok",
+              "output": 0
+            },
+            {
+              "value2": "duplicate",
+              "output": 1
+            },
+            {
+              "value2": "error",
+              "output": 2
+            }
+          ]
+        }
+      },
+      "id": "i-route",
+      "name": "Route Result",
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 1,
+      "position": [
+        720,
+        260
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "i-s1-a",
+              "name": "notification_mode",
+              "value": "TEST_ONLY until the Discord node is enabled",
+              "type": "string"
+            },
+            {
+              "id": "i-s1-b",
+              "name": "notification_text",
+              "value": "={{ '[TEST ONLY] New resume screened: candidate #' + $json.candidate_id + ' for job #' + $json.job_id + ' - coverage score ' + $json.score + ' (' + $json.counts.matched + ' matched, ' + $json.counts.partial + ' partial, ' + $json.counts.insufficient + ' insufficient evidence). Awaiting HUMAN review in TalentOps AI.' }}",
+              "type": "string"
+            },
+            {
+              "id": "i-s1-c",
+              "name": "event_label",
+              "value": "screened",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "i-s1",
+      "name": "Prepare Review Notice",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        980,
+        100
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "i-s2-a",
+              "name": "notification_mode",
+              "value": "TEST_ONLY until the Discord node is enabled",
+              "type": "string"
+            },
+            {
+              "id": "i-s2-b",
+              "name": "notification_text",
+              "value": "={{ '[TEST ONLY] Duplicate resume detected. Existing candidate #' + $json.candidate_id + ' was kept unchanged.' }}",
+              "type": "string"
+            },
+            {
+              "id": "i-s2-c",
+              "name": "event_label",
+              "value": "duplicate",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "i-s2",
+      "name": "Prepare Duplicate Notice",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        980,
+        260
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "i-s3-a",
+              "name": "notification_mode",
+              "value": "TEST_ONLY until the Discord node is enabled",
+              "type": "string"
+            },
+            {
+              "id": "i-s3-b",
+              "name": "notification_text",
+              "value": "={{ '[TEST ONLY] Resume intake failed: ' + JSON.stringify($json.error).slice(0, 300) }}",
+              "type": "string"
+            },
+            {
+              "id": "i-s3-c",
+              "name": "event_label",
+              "value": "intake_failed",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "i-s3",
+      "name": "Prepare Failure Notice",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        980,
+        420
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "REPLACE_WITH_YOUR_DISCORD_WEBHOOK_URL",
+        "sendBody": true,
+        "contentType": "json",
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ content: $json.notification_text }) }}",
+        "options": {
+          "timeout": 10000
+        }
+      },
+      "id": "i-discord",
+      "name": "Send Discord Message (optional)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1240,
+        260
+      ],
+      "disabled": true,
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "content": "INBOUND: drop a PDF/DOCX into C:\\talentops-inbox. n8n sends it to TalentOps AI, which parses and screens it. Set the API key and job_id in 'Send To TalentOps API'. Results land as 'Pending Review': a human decides. No decision is automated and the notice contains no resume text.",
+        "height": 160,
+        "width": 520
+      },
+      "id": "i-note",
+      "name": "Note i-note",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        0,
+        20
+      ]
+    }
+  ],
+  "connections": {
+    "Watch Resume Inbox Folder": {
+      "main": [
+        [
+          {
+            "node": "Read Resume File",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Read Resume File": {
+      "main": [
+        [
+          {
+            "node": "Send To TalentOps API",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send To TalentOps API": {
+      "main": [
+        [
+          {
+            "node": "Route Result",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Route Result": {
+      "main": [
+        [
+          {
+            "node": "Prepare Review Notice",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Prepare Duplicate Notice",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Prepare Failure Notice",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare Review Notice": {
+      "main": [
+        [
+          {
+            "node": "Send Discord Message (optional)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare Duplicate Notice": {
+      "main": [
+        [
+          {
+            "node": "Send Discord Message (optional)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare Failure Notice": {
+      "main": [
+        [
+          {
+            "node": "Send Discord Message (optional)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "active": false,
+  "pinData": {}
+}

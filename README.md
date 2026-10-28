@@ -22,7 +22,10 @@ by *which resume line*, say clearly when evidence is missing, and keep the human
 - Duplicate detection by normalized email (never silently overwrites; name/phone matches are warnings only)
 - Review statuses: Pending Review, Shortlisted, Further Review Required (no auto-reject exists)
 - Screening history, workflow event log, funnel metrics with explicit definitions
-- Optional n8n webhook (minimal payload; failures never lose the record)
+- **Ranking view** per job (review-priority order, ties share a rank, CSV export, bulk 'screen all')
+- **Intent filter**: skills mentioned only as a plan/goal/negation ('planning to learn X') are not counted as evidence; they are shown, flagged, for human review
+- **Two-way n8n automation**: outbound minimal events + inbound folder-watch resume intake with a protected API endpoint
+- **Evaluation harness**: labelled synthetic set, keyword vs TF-IDF vs MiniLM, held-out test split
 - Synthetic demo data loaded with one click
 
 ## Architecture
@@ -65,7 +68,8 @@ Open http://127.0.0.1:8000 and click **Load synthetic demo data**.
 1. Dashboard -> *Load synthetic demo data* (or **Upload resume** with files from `sample_data/resumes/`).
 2. **Jobs** -> create a job (required/preferred skills, optional minimum experience).
 3. **Candidates** -> open a candidate -> *Run screening* -> read the evidence -> set a review status.
-4. Re-upload `asha_verma_resubmission.pdf` after `asha_verma.pdf` to see duplicate detection.
+4. **Ranking** tab -> pick a job -> *Screen all unscreened candidates* -> review order (a review-priority aid, not a decision) -> CSV export.
+5. Re-upload `asha_verma_resubmission.pdf` after `asha_verma.pdf` to see duplicate detection.
 
 Developing the UI: `cd frontend; npm install; npm run dev` (port 5173, proxies to 8000); `npm run build` refreshes `dist`.
 Regenerate sample files: `python scripts\generate_samples.py`.
@@ -93,19 +97,42 @@ Cosine similarity is a similarity measure, **not a probability of hiring success
 ## Workflow automation design
 On each screening and each human status change the app stores the event first, then POSTs
 `{candidate_id, job_id, status, timestamp}` to `N8N_WEBHOOK_URL` (if set) with a short timeout. No name, email, phone or resume text is sent.
-See [`docs/N8N_SETUP.md`](docs/N8N_SETUP.md). The workflow file is **generated, not yet verified in a live n8n** until you complete its checklist.
+Two workflows live in `n8n/`:
+- `01_outbound_screening_events.json` - app -> n8n (validate, route by status, build notice)
+- `02_inbound_resume_intake.json` - folder -> n8n -> `POST /api/inbound/resume` (X-API-Key protected) -> parsed + screened as *Pending Review*
+
+Full step-by-step setup, tests and troubleshooting: [`docs/N8N_SETUP.md`](docs/N8N_SETUP.md). The workflows are **generated files
+that are not verified in a live n8n** until you complete that guide's checklist. No candidate message is ever sent; the only optional
+external action is a Discord message to your own test channel.
+
+## Evaluation
+```powershell
+python -m evaluation.build_dataset     # regenerate the synthetic labelled set (40 resumes, 4 jobs; deterministic)
+python -m evaluation.run_eval          # writes evaluation/results/report.md and results.json
+```
+Protocol: resumes are split into DEV and TEST; the partial-match threshold is chosen on DEV and reported on TEST. Each
+(resume, requirement) pair is labelled *has skill* (stated explicitly or paraphrased) or *no skill* (absent, or mentioned only
+as a goal). The report compares keyword-only, TF-IDF, and MiniLM (when installed) on precision/recall/F1, recall on paraphrased
+skills, false positives on goal-only mentions, and Spearman correlation between the score and the true coverage.
+
+Findings from the first run (keyword + TF-IDF only; **MiniLM numbers must be produced on your machine**):
+- Keyword matching flagged ~74% of 'planning to learn X' lines as evidence; the intent filter removed this on the synthetic set (optimistic: same author wrote cues and test sentences).
+- Keyword and TF-IDF found essentially **none** of the paraphrased skills (recall ~0-4%). This is the case embeddings are meant to address.
+- See `evaluation/results/report.md` for the full tables. The set is small and synthetic: it supports relative comparisons, not real-world accuracy claims.
 
 ## Testing
 ```powershell
 python -m pytest -q
 ```
-Tests use small synthetic fixtures, need no network or API keys, and use the TF-IDF backend. One test exercises the MiniLM
+Tests (now including ranking, the inbound endpoint, the intent filter and the evaluation metrics) use small synthetic fixtures, need no network or API keys, and use the TF-IDF backend. One test exercises the MiniLM
 backend and is **skipped automatically** if the model is not downloaded.
 
 ## Limitations
 - No OCR: scanned/image-only PDFs are rejected with an explanatory error
 - Rule-based parsing is heuristic: unusual layouts, multi-column resumes and non-English resumes may parse poorly; name detection is always "uncertain"
 - Skill detection uses a small built-in lexicon plus the resume's skills section
+- The intent filter is a hand-written cue list: it misses unusual phrasing and can wrongly exclude a genuine line (excluded lines are always shown to the recruiter)
+- The evaluation set is synthetic and written by the matcher's author; no evaluation on real resumes has been done
 - Experience years are only read from explicit statements like "3 years of experience"; dates are not computed
 - Thresholds/weights are uncalibrated; no evaluation against labelled data has been done
 - Single-user local app: no authentication, no multi-tenant access control, SQLite only

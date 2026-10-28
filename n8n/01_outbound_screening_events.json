@@ -1,5 +1,5 @@
 {
-  "name": "TalentOps AI - Screening Event Router (optional)",
+  "name": "TalentOps AI - 1 Outbound screening events",
   "nodes": [
     {
       "parameters": {
@@ -8,13 +8,13 @@
         "responseMode": "responseNode",
         "options": {}
       },
-      "id": "webhook",
+      "id": "o-webhook",
       "name": "Screening Webhook",
       "type": "n8n-nodes-base.webhook",
       "typeVersion": 2,
       "position": [
         0,
-        200
+        260
       ],
       "webhookId": "talentops-screening-demo"
     },
@@ -23,13 +23,13 @@
         "language": "javaScript",
         "jsCode": "const body = $input.first().json.body ?? {};\nconst allowed = ['Pending Review', 'Shortlisted', 'Further Review Required'];\nconst keys = ['candidate_id', 'job_id', 'status', 'timestamp'];\nconst extra = Object.keys(body).filter(k => !keys.includes(k));\nconst valid = Number.isInteger(body.candidate_id) && Number.isInteger(body.job_id)\n  && allowed.includes(body.status) && typeof body.timestamp === 'string'\n  && !isNaN(Date.parse(body.timestamp)) && extra.length === 0;\nreturn [{ json: valid\n  ? { valid: true, route: body.status, candidate_id: body.candidate_id, job_id: body.job_id, status: body.status, timestamp: body.timestamp }\n  : { valid: false, route: 'invalid', error: 'Invalid payload: expected exactly candidate_id (int), job_id (int), status (known review status), timestamp (ISO string)' } }];"
       },
-      "id": "validate",
+      "id": "o-validate",
       "name": "Validate Payload",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
         220,
-        200
+        260
       ]
     },
     {
@@ -57,13 +57,13 @@
           ]
         }
       },
-      "id": "route",
+      "id": "o-route",
       "name": "Route by Status",
       "type": "n8n-nodes-base.switch",
       "typeVersion": 1,
       "position": [
         440,
-        200
+        260
       ]
     },
     {
@@ -71,19 +71,19 @@
         "assignments": {
           "assignments": [
             {
-              "id": "a1",
+              "id": "o-s1-a",
               "name": "notification_mode",
-              "value": "TEST_ONLY - nothing is sent",
+              "value": "TEST_ONLY until the Discord node is enabled",
               "type": "string"
             },
             {
-              "id": "a2",
+              "id": "o-s1-b",
               "name": "notification_text",
-              "value": "={{ '[TEST ONLY - not sent] Candidate #' + $json.candidate_id + ' / job #' + $json.job_id + ' was SHORTLISTED by a human reviewer at ' + $json.timestamp }}",
+              "value": "={{ '[TEST ONLY] Candidate #' + $json.candidate_id + ' / job #' + $json.job_id + ' was SHORTLISTED by a human reviewer at ' + $json.timestamp }}",
               "type": "string"
             },
             {
-              "id": "a3",
+              "id": "o-s1-c",
               "name": "event_label",
               "value": "shortlisted",
               "type": "string"
@@ -92,13 +92,13 @@
         },
         "options": {}
       },
-      "id": "prepare-shortlisted-notice",
+      "id": "o-s1",
       "name": "Prepare Shortlisted Notice",
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
         700,
-        40
+        80
       ]
     },
     {
@@ -106,19 +106,19 @@
         "assignments": {
           "assignments": [
             {
-              "id": "a1",
+              "id": "o-s2-a",
               "name": "notification_mode",
-              "value": "TEST_ONLY - nothing is sent",
+              "value": "TEST_ONLY until the Discord node is enabled",
               "type": "string"
             },
             {
-              "id": "a2",
+              "id": "o-s2-b",
               "name": "notification_text",
-              "value": "={{ '[TEST ONLY - not sent] Candidate #' + $json.candidate_id + ' / job #' + $json.job_id + ' is awaiting recruiter review at ' + $json.timestamp }}",
+              "value": "={{ '[TEST ONLY] Candidate #' + $json.candidate_id + ' / job #' + $json.job_id + ' is awaiting recruiter review at ' + $json.timestamp }}",
               "type": "string"
             },
             {
-              "id": "a3",
+              "id": "o-s2-c",
               "name": "event_label",
               "value": "pending_review",
               "type": "string"
@@ -127,13 +127,13 @@
         },
         "options": {}
       },
-      "id": "prepare-pending-notice",
+      "id": "o-s2",
       "name": "Prepare Pending Notice",
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
         700,
-        200
+        260
       ]
     },
     {
@@ -141,19 +141,19 @@
         "assignments": {
           "assignments": [
             {
-              "id": "a1",
+              "id": "o-s3-a",
               "name": "notification_mode",
-              "value": "TEST_ONLY - nothing is sent",
+              "value": "TEST_ONLY until the Discord node is enabled",
               "type": "string"
             },
             {
-              "id": "a2",
+              "id": "o-s3-b",
               "name": "notification_text",
-              "value": "={{ '[TEST ONLY - not sent] Candidate #' + $json.candidate_id + ' / job #' + $json.job_id + ' needs FURTHER REVIEW at ' + $json.timestamp }}",
+              "value": "={{ '[TEST ONLY] Candidate #' + $json.candidate_id + ' / job #' + $json.job_id + ' needs FURTHER REVIEW at ' + $json.timestamp }}",
               "type": "string"
             },
             {
-              "id": "a3",
+              "id": "o-s3-c",
               "name": "event_label",
               "value": "further_review",
               "type": "string"
@@ -162,13 +162,13 @@
         },
         "options": {}
       },
-      "id": "prepare-further-review-notice",
+      "id": "o-s3",
       "name": "Prepare Further Review Notice",
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
         700,
-        360
+        440
       ]
     },
     {
@@ -179,14 +179,37 @@
           "responseCode": 200
         }
       },
-      "id": "respond-ok",
+      "id": "o-ok",
       "name": "Respond 200",
       "type": "n8n-nodes-base.respondToWebhook",
       "typeVersion": 1.1,
       "position": [
-        960,
-        200
+        980,
+        260
       ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "REPLACE_WITH_YOUR_DISCORD_WEBHOOK_URL",
+        "sendBody": true,
+        "contentType": "json",
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ content: $json.notification_text }) }}",
+        "options": {
+          "timeout": 10000
+        }
+      },
+      "id": "o-discord",
+      "name": "Send Discord Message (optional)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        980,
+        440
+      ],
+      "disabled": true,
+      "onError": "continueRegularOutput"
     },
     {
       "parameters": {
@@ -196,28 +219,28 @@
           "responseCode": 400
         }
       },
-      "id": "respond-bad",
+      "id": "o-bad",
       "name": "Respond 400 Invalid",
       "type": "n8n-nodes-base.respondToWebhook",
       "typeVersion": 1.1,
       "position": [
         700,
-        540
+        620
       ]
     },
     {
       "parameters": {
-        "content": "OPTIONAL. Receives minimum-necessary screening events from TalentOps AI.\nNo emails/WhatsApp are sent: the 'Prepare ... Notice' nodes only build TEST text. Replace with a real notification node only after you have a lawful basis and consent process.",
-        "height": 120,
+        "content": "OUTBOUND: TalentOps AI -> n8n. Receives only {candidate_id, job_id, status, timestamp}. Any extra field (e.g. an email) is rejected on purpose. The Discord node is DISABLED by default: paste your webhook URL and enable it to get a real notification.",
+        "height": 140,
         "width": 420
       },
-      "id": "note",
-      "name": "Note",
+      "id": "o-note",
+      "name": "Note o-note",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
         0,
-        20
+        40
       ]
     }
   ],
@@ -283,6 +306,11 @@
             "node": "Respond 200",
             "type": "main",
             "index": 0
+          },
+          {
+            "node": "Send Discord Message (optional)",
+            "type": "main",
+            "index": 0
           }
         ]
       ]
@@ -292,6 +320,11 @@
         [
           {
             "node": "Respond 200",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Send Discord Message (optional)",
             "type": "main",
             "index": 0
           }
@@ -305,6 +338,11 @@
             "node": "Respond 200",
             "type": "main",
             "index": 0
+          },
+          {
+            "node": "Send Discord Message (optional)",
+            "type": "main",
+            "index": 0
           }
         ]
       ]
@@ -314,8 +352,5 @@
     "executionOrder": "v1"
   },
   "active": false,
-  "pinData": {},
-  "meta": {
-    "templateCredsSetupCompleted": true
-  }
+  "pinData": {}
 }
